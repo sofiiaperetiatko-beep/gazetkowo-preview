@@ -231,6 +231,10 @@
       overflow: hidden;
       margin: 0 0 8px;
       box-shadow: var(--elev-flat);
+      transition:
+        opacity var(--motion-base) var(--ease-standard),
+        height var(--motion-base) var(--ease-standard),
+        margin-bottom var(--motion-base) var(--ease-standard);
     }
 
     .add-product-row {
@@ -428,7 +432,8 @@
       transition:
         opacity var(--motion-base) var(--ease-standard),
         transform var(--motion-base) var(--ease-standard),
-        max-height var(--motion-base) var(--ease-standard);
+        height var(--motion-base) var(--ease-standard),
+        border-bottom-width var(--motion-base) var(--ease-standard);
     }
 
     .manual .row { min-height: 56px; }
@@ -456,6 +461,15 @@
         transform var(--motion-fast) var(--ease-standard),
         background var(--motion-fast) var(--ease-standard),
         border-color var(--motion-fast) var(--ease-standard);
+    }
+
+    .check::before {
+      content: "";
+      position: absolute;
+      top: -8px;
+      bottom: -8px;
+      left: -8px;
+      right: -16px;
     }
 
     .check:active {
@@ -683,6 +697,16 @@
       font-size: 10px;
       line-height: 1;
       font-weight: 400;
+    }
+
+    .bought-store {
+      margin-bottom: 3px;
+      color: var(--mock-muted);
+      font-size: 10px;
+      line-height: 1;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
     }
 
     .offer-pill,
@@ -1793,9 +1817,101 @@
       emptyBought.classList.toggle("is-visible", count === 0);
     }
 
+    function collapseRow(row, onDone) {
+      const height = row.getBoundingClientRect().height;
+      row.style.overflow = "hidden";
+      row.style.height = `${height}px`;
+      row.style.minHeight = "0px";
+      row.getBoundingClientRect();
+
+      requestAnimationFrame(() => {
+        row.classList.add("is-removing");
+        row.style.height = "0px";
+        row.style.borderBottomWidth = "0px";
+      });
+
+      window.setTimeout(() => onDone?.(), 210);
+    }
+
+    function expandRow(row) {
+      const targetHeight = row.getBoundingClientRect().height;
+      row.style.overflow = "hidden";
+      row.style.minHeight = "0px";
+      row.style.height = "0px";
+      row.style.borderBottomWidth = "0px";
+      row.getBoundingClientRect();
+
+      requestAnimationFrame(() => {
+        row.style.height = `${targetHeight}px`;
+        row.style.borderBottomWidth = "";
+      });
+
+      window.setTimeout(() => {
+        row.style.height = "";
+        row.style.minHeight = "";
+        row.style.overflow = "";
+      }, 210);
+    }
+
+    function collapseSection(section, onDone) {
+      const rect = section.getBoundingClientRect();
+      section.style.overflow = "hidden";
+      section.style.height = `${rect.height}px`;
+      section.style.marginBottom = getComputedStyle(section).marginBottom;
+      section.getBoundingClientRect();
+
+      requestAnimationFrame(() => {
+        section.style.opacity = "0";
+        section.style.height = "0px";
+        section.style.marginBottom = "0px";
+      });
+
+      window.setTimeout(() => onDone?.(), 210);
+    }
+
+    function expandSection(section) {
+      section.style.display = "";
+      section.style.height = "auto";
+      section.style.marginBottom = "";
+      section.style.opacity = "";
+      const targetHeight = section.getBoundingClientRect().height;
+      const targetMarginBottom = getComputedStyle(section).marginBottom;
+      section.style.overflow = "hidden";
+      section.style.height = "0px";
+      section.style.marginBottom = "0px";
+      section.style.opacity = "0";
+      section.getBoundingClientRect();
+
+      requestAnimationFrame(() => {
+        section.style.height = `${targetHeight}px`;
+        section.style.marginBottom = targetMarginBottom;
+        section.style.opacity = "";
+      });
+
+      window.setTimeout(() => {
+        section.style.height = "";
+        section.style.overflow = "";
+        section.style.marginBottom = "";
+      }, 210);
+    }
+
+    function updateRetailerSectionVisibility(section) {
+      if (!section || !section.classList.contains("retailer")) return;
+      const hasRows = Boolean(section.querySelector(".row"));
+      const isHidden = section.style.display === "none";
+
+      if (!hasRows && !isHidden) {
+        collapseSection(section, () => { section.style.display = "none"; });
+      } else if (hasRows && isHidden) {
+        expandSection(section);
+      }
+    }
+
     function createBoughtRow(sourceRow, restoreMeta) {
       const row = document.createElement("article");
-      const isRetailerProduct = Boolean(sourceRow.closest(".retailer"));
+      const retailerSection = sourceRow.closest(".retailer");
+      const isRetailerProduct = Boolean(retailerSection);
+      const retailerName = retailerSection?.querySelector(".store-title")?.textContent || "";
       const price = sourceRow.dataset.price || "";
       const qty = sourceRow.dataset.qty || "";
       const hasPurchaseMeta = isRetailerProduct && price && qty;
@@ -1805,6 +1921,7 @@
       row.dataset.qty = qty;
       row.dataset.category = sourceRow.dataset.category || "";
       row.dataset.hasPromos = sourceRow.dataset.hasPromos || "";
+      row.dataset.retailer = retailerName;
       row._restoreMeta = restoreMeta;
 
       const name = sourceRow.dataset.name || sourceRow.querySelector(".name strong")?.textContent || "Produkt";
@@ -1817,11 +1934,15 @@
             <path d="m5 12 4 4 10-10"></path>
           </svg>
         </button>
-        <div class="item-main"><div class="name"><strong></strong></div></div>
+        <div class="item-main">
+          ${retailerName ? `<div class="bought-store"></div>` : ""}
+          <div class="name"><strong></strong></div>
+        </div>
         ${hasPurchaseMeta ? `<span class="qty-pill">${qty}x</span><div class="price">${formatPriceHtml(price)}</div>` : ""}
       `;
       row.querySelector(".check").after(media);
       row.querySelector("strong").textContent = name;
+      if (retailerName) row.querySelector(".bought-store").textContent = retailerName;
       return row;
     }
 
@@ -2064,16 +2185,27 @@
           button.classList.add("is-checked");
 
           window.setTimeout(() => {
-            sourceRow.classList.add("is-removing");
+            const parent = restoreMeta.parent;
+            const isLastInSection = parent.classList.contains("retailer") && parent.querySelectorAll(".row").length === 1;
 
-            window.setTimeout(() => {
+            const moveToBought = () => {
               const boughtRow = createBoughtRow(sourceRow, restoreMeta);
               const firstRow = boughtList.querySelector(".row");
               boughtList.insertBefore(boughtRow, firstRow || emptyBought);
               sourceRow.remove();
               updateBoughtCount();
-              window.setTimeout(() => boughtRow.classList.remove("is-adding"), 280);
-            }, 180);
+              expandRow(boughtRow);
+              window.setTimeout(() => boughtRow.classList.remove("is-adding"), 220);
+            };
+
+            if (isLastInSection) {
+              collapseSection(parent, () => {
+                parent.style.display = "none";
+                moveToBought();
+              });
+            } else {
+              collapseRow(sourceRow, moveToBought);
+            }
           }, 260);
         }, 420);
       });
@@ -2087,6 +2219,7 @@
       storeSection.appendChild(row);
       bindActiveRow(row);
       window.setTimeout(() => row.classList.remove("is-adding"), 280);
+      updateRetailerSectionVisibility(storeSection);
       return true;
     }
 
@@ -2385,11 +2518,11 @@
 
     function restoreSourceRow(boughtRow) {
       const restoreMeta = boughtRow._restoreMeta;
-      boughtRow.classList.add("is-removing");
 
-      window.setTimeout(() => {
+      collapseRow(boughtRow, () => {
         if (restoreMeta?.row && restoreMeta?.parent) {
           const { row, parent, nextSibling } = restoreMeta;
+          const sectionWasHidden = parent.classList.contains("retailer") && parent.style.display === "none";
           row.classList.remove("is-removing");
           row.querySelector(".check")?.classList.remove("is-checked");
 
@@ -2400,12 +2533,14 @@
           }
 
           row.classList.add("is-adding");
-          window.setTimeout(() => row.classList.remove("is-adding"), 280);
+          if (!sectionWasHidden) expandRow(row);
+          window.setTimeout(() => row.classList.remove("is-adding"), 220);
+          updateRetailerSectionVisibility(parent);
         }
 
         boughtRow.remove();
         updateBoughtCount();
-      }, 160);
+      });
     }
 
     document.querySelectorAll("main .card:not(.bought) .row").forEach(bindActiveRow);
