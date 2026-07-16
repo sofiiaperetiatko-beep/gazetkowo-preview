@@ -1,0 +1,2507 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Lista zakupów - mobile web</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #ffffff;
+      --surface: #ffffff;
+      --surface-warm: #f7f7f7;
+      --fg: #222222;
+      --fg-2: #3f3f3f;
+      --muted: #6a6a6a;
+      --meta: #929292;
+      --border: #dddddd;
+      --border-soft: #ebebeb;
+      --accent: #ff385c;
+      --accent-on: #ffffff;
+      --accent-hover: #e31c5f;
+      --accent-active: #e00b41;
+      --success: #008a05;
+      --warn: #c47700;
+      --danger: #c13515;
+      --font-display: "Roboto", -apple-system, system-ui, "Helvetica Neue", sans-serif;
+      --font-body: "Roboto", -apple-system, system-ui, "Helvetica Neue", sans-serif;
+      --font-retailer: "DM Sans", "Roboto", -apple-system, system-ui, sans-serif;
+      --font-mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Monaco, Consolas, monospace;
+      --text-xs: 12px;
+      --text-sm: 14px;
+      --text-base: 16px;
+      --text-lg: 20px;
+      --text-xl: 22px;
+      --text-2xl: 28px;
+      --text-3xl: 44px;
+      --text-4xl: 56px;
+      --leading-body: 1.43;
+      --leading-tight: 1.2;
+      --tracking-display: -0.02em;
+      --space-1: 4px;
+      --space-2: 8px;
+      --space-3: 12px;
+      --space-4: 16px;
+      --space-5: 20px;
+      --space-6: 24px;
+      --space-8: 32px;
+      --space-12: 48px;
+      --section-y-desktop: 64px;
+      --section-y-tablet: 48px;
+      --section-y-phone: 32px;
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 20px;
+      --radius-pill: 9999px;
+      --elev-flat: none;
+      --elev-ring: 0 0 0 1px var(--border);
+      --elev-raised:
+        rgba(0, 0, 0, 0.02) 0 0 0 1px,
+        rgba(0, 0, 0, 0.04) 0 2px 6px 0,
+        rgba(0, 0, 0, 0.1) 0 4px 8px 0;
+      --focus-ring: 0 0 0 2px var(--fg);
+      --motion-fast: 150ms;
+      --motion-base: 200ms;
+      --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+      --container-max: 1280px;
+      --container-gutter-desktop: 40px;
+      --container-gutter-tablet: 24px;
+      --container-gutter-phone: 16px;
+      --mock-bg: #F6F7F7;
+      --mock-ink: #263340;
+      --mock-muted: #65727e;
+      --mock-line: #F6F7F7;
+      --mock-check: #c6cbd0;
+      --mock-yellow: #f7ca34;
+      --mock-yellow-soft: #fff3c6;
+      --mock-blue-soft: #eef7ff;
+      --mock-blue: #5aa8ff;
+      --mock-red: #ff3138;
+      --mock-bought: #a3abb2;
+      --mock-pink-soft: #ffe7ea;
+      --mock-lidl-blue: #0050a4;
+      --mock-product-blue: #27304a;
+      --mock-product-red: #cf1626;
+      --mock-product-red-2: #d3142b;
+      --mock-product-cream: #eecc46;
+      --mock-product-cream-2: #efcf39;
+      --mock-product-cream-3: #f0d651;
+      --mock-product-yellow: #ffed4a;
+      --mock-product-white: #ffffff;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { min-height: 100%; }
+    body {
+      margin: 0;
+      background: var(--mock-bg);
+      color: var(--mock-ink);
+      font-family: var(--font-body);
+      font-weight: 400;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: geometricPrecision;
+    }
+
+    button {
+      border: 0;
+      background: transparent;
+      color: inherit;
+      font: inherit;
+      cursor: default;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .app {
+      width: min(100vw, 390px);
+      min-height: 100vh;
+      margin: 0 auto;
+      padding: env(safe-area-inset-top) 16px calc(74px + env(safe-area-inset-bottom));
+      background: var(--mock-bg);
+    }
+
+    .statusbar {
+      height: 28px;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 8px;
+      margin: 0 -16px;
+      padding: 0 18px 0 16px;
+      background: var(--surface);
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--mock-ink);
+    }
+
+    .signal {
+      width: 18px;
+      height: 18px;
+      background: var(--mock-ink);
+      clip-path: polygon(0 100%, 100% 0, 100% 100%);
+    }
+
+    .wifi {
+      width: 18px;
+      height: 18px;
+      background: var(--mock-ink);
+      clip-path: polygon(50% 100%, 0 20%, 18% 0, 50% 34%, 82% 0, 100% 20%);
+    }
+
+    .battery {
+      width: 14px;
+      height: 18px;
+      border-radius: 2px;
+      background: var(--mock-ink);
+      position: relative;
+    }
+
+    .battery::before {
+      content: "";
+      position: absolute;
+      left: 4px;
+      right: 4px;
+      top: 1px;
+      height: 2px;
+      border-radius: 1px 1px 0 0;
+      background: var(--surface);
+    }
+
+    .topbar {
+      height: 52px;
+      display: grid;
+      grid-template-columns: 44px minmax(0, 1fr) 44px;
+      align-items: center;
+      margin: 0 -16px;
+      padding: 0 16px;
+      background: var(--surface);
+    }
+
+    .icon-btn {
+      width: 48px;
+      height: 48px;
+      display: grid;
+      place-items: center;
+      border-radius: var(--radius-pill);
+    }
+
+    .topbar > .icon-btn:first-child {
+      justify-self: start;
+      justify-items: start;
+    }
+
+    .title {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      min-width: 0;
+      color: var(--mock-ink);
+      font-size: 18px;
+      line-height: 1.1;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .title span {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .accent-bar {
+      height: 4px;
+      width: 56.3%;
+      margin: 0 -16px 12px;
+      border-radius: 0 var(--radius-pill) var(--radius-pill) 0;
+      background: var(--mock-yellow);
+    }
+
+    .card {
+      background: var(--surface);
+      border-radius: 16px;
+      overflow: hidden;
+      margin: 0 0 8px;
+      box-shadow: var(--elev-flat);
+    }
+
+    .add-product-row {
+      width: 100%;
+      min-height: 52px;
+      display: grid;
+      grid-template-columns: 22px minmax(0, 1fr);
+      align-items: center;
+      column-gap: 8px;
+      padding: 0 12px;
+      border-bottom: 1px solid var(--mock-line);
+      color: var(--mock-ink);
+      cursor: pointer;
+      touch-action: manipulation;
+    }
+
+    .add-product-icon {
+      width: 22px;
+      height: 22px;
+      display: grid;
+      place-items: center;
+      border-radius: var(--radius-pill);
+      background: var(--mock-yellow);
+      color: var(--mock-ink);
+      font-size: 18px;
+      line-height: 1;
+      font-weight: 700;
+    }
+
+    .add-product-label {
+      justify-self: start;
+      font-size: 14px;
+      line-height: 1;
+      font-weight: 700;
+    }
+
+    .inline-add-form {
+      display: none;
+      padding: 12px;
+      border-bottom: 1px solid var(--mock-line);
+      background: var(--surface);
+    }
+
+    .inline-add.is-open .add-product-row {
+      display: none;
+    }
+
+    .inline-add.is-open .inline-add-form {
+      display: grid;
+      gap: 10px;
+    }
+
+    .inline-field {
+      display: grid;
+      gap: 6px;
+    }
+
+    .inline-field label {
+      color: var(--mock-muted);
+      font-size: 10px;
+      line-height: 1.2;
+      font-weight: 700;
+    }
+
+    .inline-input {
+      width: 100%;
+      min-height: 42px;
+      border: 1px solid var(--mock-line);
+      border-radius: 12px;
+      background: var(--surface);
+      color: var(--mock-ink);
+      font-family: var(--font-body);
+      font-size: 14px;
+      font-weight: 700;
+      outline: none;
+      padding: 0 12px;
+    }
+
+    .inline-input:focus {
+      border-color: var(--mock-yellow);
+      box-shadow: 0 0 0 2px rgba(255, 202, 5, 0.24);
+    }
+
+    .inline-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .quick-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .quick-pill {
+      min-height: 30px;
+      border: 1px solid #C9CCD0;
+      border-radius: var(--radius-pill);
+      padding: 0 10px;
+      background: var(--surface);
+      color: var(--mock-ink);
+      font-family: var(--font-body);
+      font-size: 12px;
+      line-height: 1;
+      font-weight: 700;
+      touch-action: manipulation;
+    }
+
+    .quick-pill:active {
+      border-color: #C9CCD0;
+      background: var(--mock-yellow-soft);
+    }
+
+    .inline-suggestion {
+      display: none;
+      min-height: 44px;
+      grid-template-columns: 22px minmax(0, 1fr);
+      align-items: center;
+      column-gap: 16px;
+      padding: 0 12px;
+      border: 1px solid var(--mock-line);
+      border-radius: 12px;
+      background: var(--surface);
+      color: var(--mock-ink);
+      font-family: var(--font-body);
+      font-size: 14px;
+      font-weight: 700;
+      text-align: left;
+      touch-action: manipulation;
+    }
+
+    .inline-suggestion.is-visible {
+      display: grid;
+    }
+
+    .inline-suggestion:active {
+      border-color: var(--mock-yellow);
+      background: var(--mock-yellow-soft);
+    }
+
+    .suggestion-dot {
+      width: 22px;
+      height: 22px;
+      display: grid;
+      place-items: center;
+      border-radius: var(--radius-pill);
+      background: var(--mock-yellow-soft);
+    }
+
+    .inline-stepper {
+      min-height: 42px;
+      display: grid;
+      grid-template-columns: 40px 1fr 40px;
+      align-items: center;
+      border: 1px solid var(--mock-line);
+      border-radius: 12px;
+      overflow: hidden;
+      background: var(--surface);
+    }
+
+    .inline-stepper button {
+      width: 40px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      color: var(--mock-ink);
+      font-size: 18px;
+      font-weight: 700;
+      background: var(--surface);
+    }
+
+    .inline-stepper input {
+      width: 100%;
+      height: 42px;
+      border: 0;
+      border-left: 1px solid var(--mock-line);
+      border-right: 1px solid var(--mock-line);
+      color: var(--mock-ink);
+      text-align: center;
+      font-family: var(--font-body);
+      font-size: 14px;
+      font-weight: 700;
+      outline: none;
+    }
+
+    .row {
+      min-height: 68px;
+      display: grid;
+      grid-template-columns: 22px 28px minmax(0, 1fr) auto auto;
+      align-items: center;
+      column-gap: 8px;
+      padding: 0 12px;
+      border-bottom: 1px solid var(--mock-line);
+      transition:
+        opacity var(--motion-base) var(--ease-standard),
+        transform var(--motion-base) var(--ease-standard),
+        max-height var(--motion-base) var(--ease-standard);
+    }
+
+    .manual .row { min-height: 56px; }
+    .row:last-child { border-bottom: 0; }
+    .row.is-removing {
+      opacity: 0;
+      transform: translateX(18px) scale(0.98);
+    }
+
+    .row {
+      cursor: pointer;
+    }
+
+    .check {
+      width: 22px;
+      height: 22px;
+      border: 2px solid var(--mock-check);
+      border-radius: var(--radius-pill);
+      background: var(--surface);
+      display: grid;
+      place-items: center;
+      position: relative;
+      cursor: pointer;
+      transition:
+        transform var(--motion-fast) var(--ease-standard),
+        background var(--motion-fast) var(--ease-standard),
+        border-color var(--motion-fast) var(--ease-standard);
+    }
+
+    .check:active {
+      transform: scale(0.88);
+    }
+
+    .icon-btn:active,
+    .bottom-item:active {
+      transform: none;
+    }
+
+    .check svg {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      opacity: 0;
+      stroke: var(--surface);
+      transition: opacity var(--motion-fast) var(--ease-standard);
+    }
+
+    .check.is-checked {
+      border-color: var(--mock-yellow);
+      background: var(--mock-yellow);
+    }
+
+    .check.is-checked svg {
+      opacity: 1;
+      animation: check-pop 0.32s var(--ease-standard);
+    }
+
+    .check.is-loading {
+      border-color: transparent;
+      background: var(--surface);
+    }
+
+    .check.is-loading svg { opacity: 0; }
+
+    .check.is-loading::before {
+      content: "";
+      position: absolute;
+      inset: -2px;
+      border-radius: var(--radius-pill);
+      border: 2px solid var(--border-soft);
+      border-top-color: var(--mock-yellow);
+      border-right-color: var(--mock-yellow);
+      animation: check-spin 0.55s linear infinite;
+    }
+
+    @keyframes check-spin {
+      to { transform: rotate(360deg); }
+    }
+
+    @keyframes check-pop {
+      0% { transform: translate(-50%, -50%) scale(0.3); opacity: 0; }
+      55% { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
+      100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+    }
+
+    .category-icon,
+    .thumb,
+    .store-logo {
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      flex: 0 0 auto;
+    }
+
+    .category-icon {
+      width: 20px;
+      height: 20px;
+      justify-self: end;
+      border-radius: 4px;
+      background: var(--mock-yellow-soft);
+      color: var(--mock-yellow);
+    }
+
+    .category-icon.snack {
+      background: var(--mock-pink-soft);
+      color: var(--mock-red);
+    }
+
+    .category-icon.coffee-cat,
+    .field-category-icon.coffee-cat {
+      background: #ece7ff;
+      color: #6046b6;
+    }
+
+    .category-icon.oil-cat,
+    .field-category-icon.oil-cat {
+      background: #fff0c8;
+      color: #c98a00;
+    }
+
+    .category-icon.fruit-cat,
+    .field-category-icon.fruit-cat {
+      background: #fff1d8;
+      color: #f08a00;
+    }
+
+    .category-icon.veg-cat,
+    .field-category-icon.veg-cat {
+      background: #e7f7ea;
+      color: #2a9a49;
+    }
+
+    .milk-icon,
+    .cheese-icon {
+      width: 9px;
+      height: 14px;
+      border-radius: 4px 4px 2px 2px;
+      border: 1.5px solid currentColor;
+      border-top-width: 3px;
+      position: relative;
+    }
+
+    .milk-icon::before,
+    .cheese-icon::before {
+      content: "";
+      position: absolute;
+      left: 2px;
+      right: 2px;
+      top: -6px;
+      height: 5px;
+      border-radius: 2px 2px 0 0;
+      border: 1.5px solid currentColor;
+      border-bottom: 0;
+      background: var(--mock-yellow-soft);
+    }
+
+    .chips-icon {
+      width: 16px;
+      height: 11px;
+      border-radius: 3px 3px 7px 7px;
+      background: currentColor;
+      position: relative;
+    }
+
+    .chips-icon::before {
+      content: "";
+      position: absolute;
+      width: 12px;
+      height: 6px;
+      left: 2px;
+      top: -4px;
+      border-radius: 8px 8px 2px 2px;
+      border: 1.5px dotted currentColor;
+      background: var(--surface);
+    }
+
+    .coffee-icon {
+      width: 12px;
+      height: 15px;
+      border: 1.5px solid currentColor;
+      border-radius: 3px 3px 5px 5px;
+      position: relative;
+    }
+
+    .coffee-icon::after {
+      content: "";
+      position: absolute;
+      width: 5px;
+      height: 6px;
+      right: -5px;
+      top: 4px;
+      border: 1.5px solid currentColor;
+      border-left: 0;
+      border-radius: 0 5px 5px 0;
+    }
+
+    .oil-icon {
+      width: 10px;
+      height: 16px;
+      border-radius: 4px 4px 3px 3px;
+      border: 1.5px solid currentColor;
+      border-top-width: 4px;
+    }
+
+    .fruit-icon,
+    .veg-icon {
+      width: 15px;
+      height: 13px;
+      border-radius: 50% 50% 45% 45%;
+      background: currentColor;
+      position: relative;
+    }
+
+    .fruit-icon::before,
+    .veg-icon::before {
+      content: "";
+      position: absolute;
+      width: 6px;
+      height: 3px;
+      left: 6px;
+      top: -4px;
+      border-radius: 6px 6px 0 0;
+      background: currentColor;
+      transform: rotate(-18deg);
+    }
+
+    .item-main { min-width: 0; }
+
+    .name {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 0;
+      color: var(--mock-ink);
+      font-size: 14px;
+      line-height: 1.2;
+      font-weight: 700;
+      letter-spacing: 0;
+    }
+
+    .name strong {
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .date {
+      margin-top: 6px;
+      color: var(--mock-muted);
+      font-size: 10px;
+      line-height: 1;
+      font-weight: 400;
+    }
+
+    .offer-pill,
+    .qty-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-self: end;
+      min-height: auto;
+      padding: 2px 6px;
+      border-radius: var(--radius-pill);
+      background: var(--mock-blue-soft);
+      color: var(--mock-blue);
+      font-size: 10px;
+      line-height: 1;
+      font-weight: 400;
+      white-space: nowrap;
+    }
+
+    .qty-pill {
+      background: var(--mock-bg);
+      color: var(--mock-muted);
+      font-weight: 700;
+    }
+
+    .price {
+      min-width: 0;
+      justify-self: end;
+      text-align: right;
+      color: var(--mock-ink);
+      font-size: 18px;
+      line-height: 0.9;
+      font-weight: 700;
+      letter-spacing: -0.035em;
+    }
+
+    .price sup {
+      font-size: 10px;
+      line-height: 0;
+      vertical-align: super;
+      margin-left: 1px;
+      letter-spacing: -0.02em;
+    }
+
+    .manual .row.no-price {
+      grid-template-columns: 22px 28px minmax(0, 1fr);
+    }
+
+    .manual .row.no-price.has-count {
+      grid-template-columns: 22px 28px minmax(0, 1fr) auto;
+    }
+
+    .manual .row.no-price .price {
+      display: none;
+    }
+
+    .store-head {
+      min-height: 45px;
+      display: grid;
+      grid-template-columns: 30px minmax(0, 1fr) 16px;
+      align-items: center;
+      column-gap: 8px;
+      padding: 0 12px;
+      border-bottom: 1px solid var(--mock-line);
+    }
+
+    .store-logo {
+      width: 22px;
+      height: 22px;
+      border-radius: 2px;
+      font-size: 5px;
+      font-weight: 700;
+      line-height: 1;
+      letter-spacing: -0.06em;
+      text-align: center;
+    }
+
+    .store-logo.biedronka {
+      background: var(--mock-yellow);
+      color: var(--mock-red);
+      border: 1px solid var(--mock-red);
+    }
+
+    .store-logo.lidl {
+      border-radius: 0;
+      background: var(--mock-lidl-blue);
+      color: var(--mock-yellow);
+      border: 2px solid var(--mock-yellow);
+      font-size: 6px;
+      letter-spacing: -0.08em;
+    }
+
+    .store-logo.kaufland {
+      background: #e30613;
+      color: var(--surface);
+      border: 1px solid #b8000b;
+      font-size: 5px;
+      letter-spacing: -0.08em;
+    }
+
+    .store-logo.auchan {
+      background: #e91e63;
+      color: var(--surface);
+      border: 1px solid #f5c400;
+      font-size: 5px;
+      letter-spacing: -0.08em;
+    }
+
+    .store-title {
+      color: var(--mock-ink);
+      font-family: var(--font-retailer);
+      font-size: 16px;
+      line-height: 1;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .store-head .icon-btn {
+      width: 16px;
+      height: 16px;
+      justify-self: end;
+    }
+
+    .store-head .icon-btn svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    .thumb {
+      width: 20px;
+      height: 20px;
+      justify-self: end;
+      border-radius: 4px;
+      color: var(--surface);
+      font-size: 0;
+      line-height: 1.05;
+      text-align: center;
+      font-weight: 700;
+      box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.06);
+    }
+
+    .thumb.coffee {
+      background:
+        linear-gradient(135deg, var(--mock-product-blue) 0 45%, transparent 46%),
+        linear-gradient(160deg, var(--mock-product-cream) 0 55%, var(--mock-product-red) 56% 100%);
+    }
+
+    .thumb.juice {
+      background:
+        linear-gradient(160deg, var(--mock-product-cream-2) 0 35%, transparent 36%),
+        linear-gradient(135deg, var(--mock-product-red-2) 0 72%, var(--mock-product-yellow) 73% 100%);
+    }
+
+    .thumb.butter {
+      background:
+        linear-gradient(135deg, var(--mock-product-blue) 0 45%, transparent 46%),
+        linear-gradient(160deg, var(--mock-product-cream-3) 0 58%, var(--mock-product-white) 59% 100%);
+      color: var(--mock-ink);
+    }
+
+    .thumb.cheese-a {
+      background:
+        linear-gradient(135deg, var(--mock-product-cream) 0 42%, transparent 43%),
+        linear-gradient(155deg, var(--mock-product-red) 0 62%, var(--mock-product-yellow) 63% 100%);
+    }
+
+    .thumb.cheese-b {
+      background:
+        linear-gradient(135deg, var(--mock-product-blue) 0 38%, transparent 39%),
+        linear-gradient(155deg, var(--mock-product-cream-3) 0 62%, var(--mock-product-white) 63% 100%);
+    }
+
+    .thumb.milk-a,
+    .promo-img.milk-a {
+      background:
+        linear-gradient(135deg, var(--mock-product-blue) 0 42%, transparent 43%),
+        linear-gradient(155deg, var(--mock-product-white) 0 62%, #dceeff 63% 100%);
+    }
+
+    .thumb.milk-b,
+    .promo-img.milk-b {
+      background:
+        linear-gradient(135deg, #1f7ed6 0 42%, transparent 43%),
+        linear-gradient(155deg, var(--mock-product-white) 0 60%, #f4f8ff 61% 100%);
+    }
+
+    .thumb.milk-c,
+    .promo-img.milk-c {
+      background:
+        linear-gradient(135deg, #e30613 0 42%, transparent 43%),
+        linear-gradient(155deg, var(--mock-product-white) 0 62%, #ffe8e8 63% 100%);
+    }
+
+    .thumb.milk-d,
+    .promo-img.milk-d {
+      background:
+        linear-gradient(135deg, #e91e63 0 40%, transparent 41%),
+        linear-gradient(155deg, var(--mock-product-white) 0 62%, #fff0f6 63% 100%);
+    }
+
+    .section-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin: 16px 0 8px;
+    }
+
+    .section-head h2 {
+      margin: 0;
+      color: var(--mock-ink);
+      font-size: 12px;
+      line-height: 1;
+      text-transform: uppercase;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+    }
+
+    .delete {
+      padding: 6px 0;
+      color: var(--mock-red);
+      font-size: 12px;
+      line-height: 1;
+      font-weight: 400;
+      pointer-events: none;
+    }
+
+    .delete:disabled { color: var(--mock-bought); cursor: default; }
+
+    .bought {
+      border-radius: 20px;
+    }
+
+    .bought .row {
+      min-height: 44px;
+      grid-template-columns: 22px 28px minmax(0, 1fr);
+      column-gap: 8px;
+      opacity: 1;
+      padding: 0 12px;
+      cursor: pointer;
+    }
+
+    .bought .row.has-purchase-meta {
+      grid-template-columns: 22px 28px minmax(0, 1fr) auto auto;
+    }
+
+    .bought .row.is-adding,
+    main .card:not(.bought) .row.is-adding {
+      animation: bought-in 260ms var(--ease-standard) both;
+    }
+
+    .bought .check {
+      width: 22px;
+      height: 22px;
+      border-color: var(--mock-check);
+      background: var(--surface);
+      justify-self: start;
+    }
+
+    .bought .check svg {
+      width: 14px;
+      height: 14px;
+      display: block;
+      opacity: 1;
+      stroke: var(--mock-check);
+    }
+
+    .bought .category-icon,
+    .bought .thumb {
+      filter: grayscale(1);
+      opacity: 0.46;
+    }
+
+    .bought .name strong {
+      color: var(--mock-bought);
+      text-decoration: none;
+    }
+
+    .bought .row:not(.has-purchase-meta) .price { display: none; }
+
+    .bought .qty-pill {
+      background: var(--mock-bg);
+      color: var(--mock-bought);
+    }
+
+    .bought .price {
+      display: block;
+      color: var(--mock-bought);
+    }
+
+    .empty {
+      display: none;
+      padding: 30px 18px;
+      color: var(--mock-bought);
+      font-size: 17px;
+      font-weight: 400;
+      text-align: center;
+    }
+
+    .empty.is-visible { display: block; }
+
+    .bottom-nav {
+      position: fixed;
+      left: 50%;
+      bottom: 0;
+      width: min(100vw, 390px);
+      height: calc(58px + env(safe-area-inset-bottom));
+      transform: translateX(-50%);
+      padding: 5px 10px env(safe-area-inset-bottom);
+      background: var(--surface);
+      border-top: 1px solid var(--mock-check);
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      z-index: 5;
+    }
+
+    .bottom-item {
+      display: grid;
+      place-items: center;
+      align-content: center;
+      gap: 6px;
+      min-width: 0;
+      border-radius: var(--radius-sm);
+      color: var(--mock-ink);
+      font-size: 13px;
+      line-height: 1;
+      font-weight: 700;
+      pointer-events: none;
+    }
+
+    .bottom-item svg {
+      width: 31px;
+      height: 31px;
+      stroke-width: 2.45;
+    }
+
+    .bottom-item.active svg {
+      stroke: var(--mock-yellow);
+      filter: drop-shadow(0 0 0 var(--mock-yellow));
+    }
+
+    .bottom-item.active .active-box {
+      fill: var(--mock-yellow);
+      stroke: var(--mock-ink);
+    }
+
+    .sheet-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 20;
+      display: grid;
+      align-items: end;
+      background: rgba(38, 51, 64, 0.28);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity var(--motion-base) var(--ease-standard);
+    }
+
+    .sheet-backdrop.is-open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .product-sheet {
+      width: min(100vw, 390px);
+      max-height: calc(100vh - 42px);
+      margin: 0 auto;
+      padding: 10px 16px calc(18px + env(safe-area-inset-bottom));
+      border-radius: 24px 24px 0 0;
+      background: var(--surface);
+      box-shadow: rgba(0, 0, 0, 0.16) 0 -12px 34px;
+      transform: translateY(105%);
+      transition: transform 260ms var(--ease-standard);
+      overflow: auto;
+    }
+
+    .sheet-backdrop.is-open .product-sheet {
+      transform: translateY(0);
+    }
+
+    .sheet-handle {
+      width: 42px;
+      height: 4px;
+      margin: 0 auto 14px;
+      border-radius: var(--radius-pill);
+      background: var(--mock-check);
+    }
+
+    .sheet-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .sheet-head h3 {
+      margin: 0;
+      color: var(--mock-ink);
+      font-size: 18px;
+      line-height: 1.15;
+      font-weight: 700;
+    }
+
+    .sheet-close {
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      border-radius: var(--radius-pill);
+      background: var(--mock-bg);
+      color: var(--mock-ink);
+      pointer-events: auto;
+      cursor: pointer;
+    }
+
+    .edit-grid {
+      display: grid;
+      gap: 8px;
+      margin-bottom: 18px;
+    }
+
+    .popular-block {
+      display: none;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .sheet-backdrop.is-pick-mode .popular-block {
+      display: grid;
+    }
+
+    .sheet-backdrop.is-pick-mode .edit-grid,
+    .sheet-backdrop.is-pick-mode .promo-block,
+    .sheet-backdrop.is-pick-mode .sheet-actions {
+      display: none;
+    }
+
+    .popular-intro {
+      margin: 0 0 8px;
+      color: var(--mock-muted);
+      font-size: 12px;
+      line-height: 1.35;
+      font-weight: 400;
+    }
+
+    .popular-grid {
+      display: grid;
+      overflow: hidden;
+      border-radius: 14px;
+      background: var(--surface);
+    }
+
+    .popular-item {
+      min-height: 48px;
+      display: grid;
+      grid-template-columns: 22px minmax(0, 1fr);
+      align-items: center;
+      column-gap: 16px;
+      padding: 0 12px;
+      border: 0;
+      border-bottom: 1px solid var(--mock-line);
+      border-radius: 0;
+      background: var(--surface);
+      cursor: pointer;
+      touch-action: manipulation;
+    }
+
+    .popular-item:last-child {
+      border-bottom: 0;
+    }
+
+    .popular-dot {
+      width: 20px;
+      height: 20px;
+      justify-self: center;
+      border: 1.5px solid var(--mock-line-strong);
+      border-radius: 999px;
+      background: var(--surface);
+    }
+
+    .popular-item:active .popular-dot {
+      border-color: var(--mock-yellow);
+      background: var(--mock-yellow-soft);
+    }
+
+    .popular-copy {
+      display: grid;
+      min-width: 0;
+    }
+
+    .popular-name {
+      color: var(--mock-ink);
+      font-size: 14px;
+      line-height: 1.1;
+      font-weight: 700;
+    }
+
+    .edit-field {
+      display: grid;
+      gap: 5px;
+    }
+
+    .name-input-wrap {
+      position: relative;
+      display: block;
+    }
+
+    .name-input-wrap input {
+      padding-right: 40px;
+    }
+
+    .field-category-icon {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      width: 20px;
+      height: 20px;
+      display: grid;
+      place-items: center;
+      border-radius: 4px;
+      background: var(--mock-yellow-soft);
+      color: var(--mock-yellow);
+      pointer-events: none;
+      transform: translateY(-50%);
+    }
+
+    .field-category-icon.snack {
+      background: var(--mock-pink-soft);
+      color: var(--mock-red);
+    }
+
+    .edit-field-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .edit-field label {
+      color: var(--mock-muted);
+      font-size: 10px;
+      line-height: 1;
+      font-weight: 700;
+    }
+
+    .edit-field input,
+    .edit-field select {
+      width: 100%;
+      height: 42px;
+      border: 1px solid var(--mock-line);
+      border-radius: 12px;
+      padding: 0 12px;
+      background: var(--mock-bg);
+      color: var(--mock-ink);
+      font-family: var(--font-body);
+      font-size: 14px;
+      font-weight: 700;
+      outline: none;
+    }
+
+    .edit-field select {
+      appearance: none;
+      background-image:
+        linear-gradient(45deg, transparent 50%, var(--mock-muted) 50%),
+        linear-gradient(135deg, var(--mock-muted) 50%, transparent 50%);
+      background-position:
+        calc(100% - 17px) 18px,
+        calc(100% - 12px) 18px;
+      background-size: 5px 5px, 5px 5px;
+      background-repeat: no-repeat;
+      padding-inline: 12px;
+    }
+
+    .stepper {
+      height: 42px;
+      display: grid;
+      grid-template-columns: 42px minmax(0, 1fr) 42px;
+      align-items: center;
+      overflow: hidden;
+      border: 1px solid var(--mock-line);
+      border-radius: 12px;
+      background: var(--mock-bg);
+    }
+
+    .stepper input {
+      height: 40px;
+      min-width: 0;
+      border: 0;
+      border-radius: 0;
+      padding: 0 4px;
+      background: transparent;
+      text-align: center;
+      box-shadow: none;
+    }
+
+    .stepper input:focus {
+      box-shadow: none;
+    }
+
+    .stepper-btn {
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      background: var(--surface);
+      color: var(--mock-ink);
+      font-size: 22px;
+      line-height: 1;
+      font-weight: 700;
+      cursor: pointer;
+      pointer-events: auto;
+      touch-action: manipulation;
+    }
+
+    .stepper-btn:first-child {
+      border-right: 1px solid var(--mock-line);
+    }
+
+    .stepper-btn:last-child {
+      border-left: 1px solid var(--mock-line);
+    }
+
+    .stepper-btn:active {
+      background: var(--mock-yellow-soft);
+    }
+
+    .edit-field input:focus,
+    .edit-field select:focus {
+      border-color: var(--mock-yellow);
+      box-shadow: 0 0 0 2px rgba(247, 202, 52, 0.28);
+    }
+
+    .promo-block {
+      display: none;
+      margin-top: 4px;
+    }
+
+    .promo-block.is-visible {
+      display: block;
+    }
+
+    .promo-title {
+      margin: 0 0 8px;
+      color: var(--mock-ink);
+      font-size: 14px;
+      line-height: 1.15;
+      font-weight: 700;
+    }
+
+    .promo-list {
+      display: grid;
+      gap: 8px;
+    }
+
+    .promo-item {
+      position: relative;
+      min-height: 68px;
+      display: grid;
+      grid-template-columns: 52px minmax(0, 1fr) auto;
+      align-items: center;
+      column-gap: 10px;
+      padding: 8px 8px 8px 8px;
+      border: 1px solid var(--mock-line);
+      border-radius: 14px;
+      background: var(--surface);
+      transition:
+        opacity var(--motion-base) var(--ease-standard),
+        background var(--motion-base) var(--ease-standard),
+        transform var(--motion-base) var(--ease-standard);
+    }
+
+    .promo-img {
+      width: 52px;
+      height: 52px;
+      border-radius: 8px;
+      box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.06);
+    }
+
+    .promo-img.cheese-a {
+      background:
+        linear-gradient(135deg, var(--mock-product-cream) 0 42%, transparent 43%),
+        linear-gradient(155deg, var(--mock-product-red) 0 62%, var(--mock-product-yellow) 63% 100%);
+    }
+
+    .promo-img.cheese-b {
+      background:
+        linear-gradient(135deg, var(--mock-product-blue) 0 38%, transparent 39%),
+        linear-gradient(155deg, var(--mock-product-cream-3) 0 62%, var(--mock-product-white) 63% 100%);
+    }
+
+    .promo-copy {
+      min-width: 0;
+    }
+
+    .promo-store {
+      margin-bottom: 4px;
+      color: var(--mock-ink);
+      font-family: var(--font-retailer);
+      font-size: 13px;
+      line-height: 1;
+      font-weight: 700;
+    }
+
+    .promo-name {
+      overflow: hidden;
+      color: var(--mock-ink);
+      font-size: 12px;
+      line-height: 1.15;
+      font-weight: 700;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .promo-date {
+      margin-top: 5px;
+      color: var(--mock-muted);
+      font-size: 10px;
+      line-height: 1;
+      font-weight: 400;
+    }
+
+    .promo-price {
+      min-width: 46px;
+      justify-self: end;
+      text-align: right;
+    }
+
+    .promo-action {
+      display: grid;
+      justify-items: end;
+      gap: 6px;
+    }
+
+    .promo-add {
+      min-width: 46px;
+      height: 24px;
+      display: inline-grid;
+      place-items: center;
+      padding: 0 8px;
+      border: 1px solid var(--mock-yellow);
+      border-radius: var(--radius-pill);
+      background: var(--mock-yellow-soft);
+      color: var(--mock-ink);
+      font-size: 10px;
+      line-height: 1;
+      font-weight: 700;
+      cursor: pointer;
+      touch-action: manipulation;
+    }
+
+    .promo-add.is-added {
+      min-width: 62px;
+      border-color: color-mix(in srgb, var(--success) 28%, var(--mock-line));
+      background: color-mix(in srgb, var(--success) 10%, var(--surface));
+      color: var(--success);
+    }
+
+    .promo-more {
+      width: 100%;
+      min-height: 40px;
+      display: grid;
+      place-items: center;
+      border: 1px dashed var(--mock-check);
+      border-radius: 14px;
+      background: var(--mock-bg);
+      color: var(--mock-ink);
+      font-size: 12px;
+      line-height: 1;
+      font-weight: 700;
+      cursor: pointer;
+      touch-action: manipulation;
+    }
+
+    .sheet-actions {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: 10px;
+      margin-top: 14px;
+      padding-top: 12px;
+      border-top: 1px solid var(--mock-line);
+    }
+
+    .sheet-action {
+      min-height: 44px;
+      display: grid;
+      place-items: center;
+      border-radius: 14px;
+      font-size: 14px;
+      line-height: 1;
+      font-weight: 700;
+      cursor: pointer;
+      touch-action: manipulation;
+    }
+
+    .sheet-action.delete-product {
+      border: 1px solid var(--mock-line);
+      background: var(--surface);
+      color: var(--mock-red);
+    }
+
+    .sheet-action.save-product {
+      background: var(--mock-yellow);
+      color: var(--mock-ink);
+      border-radius: 999px;
+    }
+
+    .sheet-backdrop.is-add-mode .delete-product {
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .sheet-action:active {
+      transform: scale(0.98);
+    }
+
+    .check,
+    .icon-btn {
+      pointer-events: none;
+    }
+
+    main .check {
+      pointer-events: auto;
+    }
+
+    .sheet-backdrop button,
+    .sheet-backdrop input,
+    .sheet-backdrop select {
+      pointer-events: auto;
+    }
+
+    .bought .check {
+      pointer-events: none;
+      cursor: default;
+    }
+
+    @keyframes bought-in {
+      from {
+        opacity: 0;
+        transform: translateY(-8px) scale(0.98);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <div class="statusbar" aria-hidden="true">
+      <span class="wifi"></span>
+      <span class="signal"></span>
+      <span class="battery"></span>
+      <span>12:30</span>
+    </div>
+
+    <header class="topbar">
+      <button class="icon-btn" aria-label="Menu">
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.7"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+      </button>
+      <div class="title"><span>Lista zakupów Impreza</span><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.8"><path d="m6 9 6 6 6-6"/></svg></div>
+      <button class="icon-btn" aria-label="Więcej">
+        <svg viewBox="0 0 24 24" width="25" height="25" fill="currentColor"><circle cx="12" cy="5" r="2.3"/><circle cx="12" cy="12" r="2.3"/><circle cx="12" cy="19" r="2.3"/></svg>
+      </button>
+    </header>
+
+    <div class="accent-bar"></div>
+
+    <main>
+      <section class="card manual" data-od-id="manual-products" aria-label="Produkty dodane ręcznie">
+        <div class="inline-add" id="inlineAdd">
+          <button class="add-product-row" id="addProductRow" type="button" aria-label="Dodaj produkt do listy">
+            <span class="add-product-icon" aria-hidden="true">+</span>
+            <span class="add-product-label">Dodaj produkt</span>
+          </button>
+          <form class="inline-add-form" id="inlineAddForm">
+            <div class="inline-field">
+              <label for="inlineName">Nazwa</label>
+              <input class="inline-input" id="inlineName" name="name" type="text" placeholder="Wpisz produkt" autocomplete="off">
+            </div>
+            <button class="inline-suggestion" id="inlineSuggestion" type="button" aria-live="polite">
+              <span class="suggestion-dot" aria-hidden="true"></span>
+              <span class="suggestion-name"></span>
+            </button>
+            <div class="quick-pills" aria-label="Popularne produkty">
+              <button class="quick-pill" type="button" data-quick-name="jajka" data-quick-category="Nabiał">+ jajka</button>
+              <button class="quick-pill" type="button" data-quick-name="banan" data-quick-category="Owoce">+ banan</button>
+              <button class="quick-pill" type="button" data-quick-name="ser" data-quick-category="Nabiał">+ ser</button>
+              <button class="quick-pill" type="button" data-quick-name="chleb" data-quick-category="Pieczywo">+ chleb</button>
+            </div>
+          </form>
+        </div>
+        <article class="row" data-name="ser żółty" data-price="8,99" data-qty="1" data-category="Nabiał" data-has-promos="true" data-promo-key="cheese">
+          <button class="check" aria-label="Oznacz ser żółty jako kupione"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke-width="3"><path d="m5 12 4 4 10-10"/></svg></button>
+          <div class="category-icon"><span class="cheese-icon"></span></div>
+          <div class="item-main"><div class="name"><strong>ser żółty</strong><span class="offer-pill">3 oferty</span></div></div>
+          <div class="price">8<sup>99</sup></div>
+        </article>
+        <article class="row no-price" data-name="mleko" data-price="5,00" data-qty="2" data-category="Nabiał" data-has-promos="true" data-promo-key="milk">
+          <button class="check" aria-label="Oznacz mleko jako kupione"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke-width="3"><path d="m5 12 4 4 10-10"/></svg></button>
+          <div class="category-icon"><span class="milk-icon"></span></div>
+          <div class="item-main"><div class="name"><strong>mleko</strong><span class="offer-pill">9 ofert</span></div></div>
+          <div class="price">5<sup>00</sup></div>
+        </article>
+        <article class="row no-price" data-name="chipsy" data-price="6,49" data-qty="1" data-category="Przekąski">
+          <button class="check" aria-label="Oznacz chipsy jako kupione"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke-width="3"><path d="m5 12 4 4 10-10"/></svg></button>
+          <div class="category-icon snack"><span class="chips-icon"></span></div>
+          <div class="item-main"><div class="name"><strong>chipsy</strong><span class="offer-pill">2 oferty</span></div></div>
+          <div class="price">6<sup>49</sup></div>
+        </article>
+      </section>
+
+      <section class="card retailer" data-od-id="biedronka-offers" aria-label="Oferty Biedronka">
+        <div class="store-head">
+          <div class="store-logo biedronka">Biedronka</div>
+          <div class="store-title">Biedronka</div>
+          <button class="icon-btn" aria-label="Zwiń Biedronka"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.7"><path d="m6 9 6 6 6-6"/></svg></button>
+        </div>
+        <article class="row" data-name="Kawa Tchibo family" data-price="11,99" data-qty="2" data-category="Kawa">
+          <button class="check" aria-label="Oznacz Kawa Tchibo family jako kupione"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke-width="3"><path d="m5 12 4 4 10-10"/></svg></button>
+          <div class="thumb coffee">Tchibo<br>Family</div>
+          <div class="item-main"><div class="name"><strong>Kawa Tchibo family</strong></div><div class="date">01.02-15.02</div></div>
+          <span class="qty-pill">2x</span>
+          <div class="price">11<sup>99</sup></div>
+        </article>
+        <article class="row" data-name="sok Kubuś" data-price="4,99" data-qty="2" data-category="Napoje">
+          <button class="check" aria-label="Oznacz sok Kubuś jako kupione"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke-width="3"><path d="m5 12 4 4 10-10"/></svg></button>
+          <div class="thumb juice">Kubuś</div>
+          <div class="item-main"><div class="name"><strong>sok Kubuś</strong></div><div class="date">01.02-15.02</div></div>
+          <span class="qty-pill">2x</span>
+          <div class="price">4<sup>99</sup></div>
+        </article>
+      </section>
+
+      <section class="card retailer" data-od-id="lidl-offers" aria-label="Oferty Lidl">
+        <div class="store-head">
+          <div class="store-logo lidl">Lidl</div>
+          <div class="store-title">Lidl</div>
+          <button class="icon-btn" aria-label="Zwiń Lidl"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.7"><path d="m6 9 6 6 6-6"/></svg></button>
+        </div>
+        <article class="row" data-name="masło" data-price="11,99" data-qty="2" data-category="Nabiał">
+          <button class="check" aria-label="Oznacz masło jako kupione"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke-width="3"><path d="m5 12 4 4 10-10"/></svg></button>
+          <div class="thumb butter">Pilos</div>
+          <div class="item-main"><div class="name"><strong>masło</strong></div><div class="date">01.02-15.02</div></div>
+          <span class="qty-pill">2x</span>
+          <div class="price">11<sup>99</sup></div>
+        </article>
+      </section>
+
+      <div class="section-head">
+        <h2 id="boughtTitle">Kupione (1)</h2>
+        <button class="delete" id="deleteBought">Usuń kupione</button>
+      </div>
+
+      <section class="card bought" id="boughtList" data-od-id="bought-products" aria-labelledby="boughtTitle">
+        <article class="row" data-name="mleko" data-price="5,00" data-qty="2" data-category="Nabiał">
+          <button class="check" aria-label="Produkt kupiony"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke-width="3"><path d="m5 12 4 4 10-10"/></svg></button>
+          <div class="category-icon"><span class="milk-icon"></span></div>
+          <div class="item-main"><div class="name"><strong>mleko</strong></div></div>
+          <div class="price">5<sup>00</sup></div>
+        </article>
+        <div class="empty" id="emptyBought">Brak kupionych produktów.</div>
+      </section>
+    </main>
+  </div>
+
+  <nav class="bottom-nav" aria-label="Nawigacja">
+    <button class="bottom-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 11.5 12 4l9 7.5v8a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg><span>Start</span></button>
+    <button class="bottom-item active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect class="active-box" x="5" y="3" width="14" height="18" rx="2"/><path d="M9 8h6M9 12h6M9 16h6"/></svg><span>Lista zakupów</span></button>
+    <button class="bottom-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M5 10h14l-1 10H6zM7 10V7a5 5 0 0 1 10 0v3"/></svg><span>Sklepy</span></button>
+    <button class="bottom-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="m6 18 12-12"/><circle cx="8" cy="8" r="2"/><circle cx="16" cy="16" r="2"/></svg><span>Produkty</span></button>
+  </nav>
+
+  <div class="sheet-backdrop" id="productSheet" aria-hidden="true">
+    <section class="product-sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle">
+      <div class="sheet-handle" aria-hidden="true"></div>
+      <div class="sheet-head">
+        <h3 id="sheetTitle">Edycja produktu</h3>
+        <button class="sheet-close" id="sheetClose" aria-label="Zamknij">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M6 6l12 12M18 6 6 18"/></svg>
+        </button>
+      </div>
+
+      <div class="popular-block" id="popularBlock">
+        <p class="popular-intro">Wybierz popularny produkt, a formularz uzupełni nazwę i kategorię.</p>
+        <div class="popular-grid" id="popularGrid"></div>
+      </div>
+
+      <div class="edit-grid">
+        <div class="edit-field">
+          <label for="editName">Nazwa</label>
+          <div class="name-input-wrap">
+            <input id="editName" type="text" value="">
+            <span class="field-category-icon" id="editCategoryIcon" aria-hidden="true">
+              <span class="cheese-icon"></span>
+            </span>
+          </div>
+        </div>
+        <div class="edit-field-row">
+          <div class="edit-field">
+            <label for="editPrice">Cena</label>
+            <input id="editPrice" type="text" inputmode="decimal" value="">
+          </div>
+          <div class="edit-field">
+            <label for="editQty">Ilość</label>
+            <div class="stepper" data-stepper="qty">
+              <button class="stepper-btn" type="button" data-step-action="decrease" aria-label="Zmniejsz ilość">−</button>
+              <input id="editQty" type="number" min="1" value="">
+              <button class="stepper-btn" type="button" data-step-action="increase" aria-label="Zwiększ ilość">+</button>
+            </div>
+          </div>
+        </div>
+        <div class="edit-field">
+          <label for="editCategory">Kategoria</label>
+          <select id="editCategory">
+            <option>Nabiał</option>
+            <option>Przekąski</option>
+            <option>Kawa</option>
+            <option>Napoje</option>
+            <option>Owoce</option>
+            <option>Warzywa</option>
+            <option>Oleje</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="promo-block" id="promoBlock">
+        <h4 class="promo-title">Promocje z gazetek</h4>
+        <div class="promo-list" id="promoList"></div>
+      </div>
+
+      <div class="sheet-actions">
+        <button class="sheet-action delete-product" id="deleteProduct" type="button">Usuń produkt</button>
+        <button class="sheet-action save-product" id="saveProduct" type="button">Zapisz zmiany</button>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    const boughtList = document.querySelector("#boughtList");
+    const boughtTitle = document.querySelector("#boughtTitle");
+    const emptyBought = document.querySelector("#emptyBought");
+    const productSheet = document.querySelector("#productSheet");
+    const sheetClose = document.querySelector("#sheetClose");
+    const editName = document.querySelector("#editName");
+    const editPrice = document.querySelector("#editPrice");
+    const editQty = document.querySelector("#editQty");
+    const editCategory = document.querySelector("#editCategory");
+    const editCategoryIcon = document.querySelector("#editCategoryIcon");
+    const popularGrid = document.querySelector("#popularGrid");
+    const promoBlock = document.querySelector("#promoBlock");
+    const promoList = document.querySelector("#promoList");
+    const deleteProduct = document.querySelector("#deleteProduct");
+    const saveProduct = document.querySelector("#saveProduct");
+    const addProductRow = document.querySelector("#addProductRow");
+    const inlineAdd = document.querySelector("#inlineAdd");
+    const inlineAddForm = document.querySelector("#inlineAddForm");
+    const inlineName = document.querySelector("#inlineName");
+    const inlineSuggestion = document.querySelector("#inlineSuggestion");
+    const sheetTitle = document.querySelector("#sheetTitle");
+    let activeRow = null;
+    let sheetMode = "edit";
+
+    const popularProducts = [
+      { name: "Mleko", category: "Nabiał", price: "", qty: "1" },
+      { name: "Ser", category: "Nabiał", price: "", qty: "1" },
+      { name: "Kawa", category: "Kawa", price: "", qty: "1" },
+      { name: "Olej", category: "Oleje", price: "", qty: "1" },
+      { name: "Banany", category: "Owoce", price: "", qty: "1" },
+      { name: "Papryka", category: "Warzywa", price: "", qty: "1" },
+      { name: "Pomidor", category: "Warzywa", price: "", qty: "1" },
+      { name: "Chipsy", category: "Przekąski", price: "", qty: "1" }
+    ];
+
+    const promoSets = {
+      cheese: [
+        { store: "Biedronka", name: "Ser żółty Gouda w plastrach", price: "7,49", qty: "1", date: "01.02-15.02", thumb: "cheese-a" },
+        { store: "Lidl", name: "Ser Królewski 150 g", price: "8,29", qty: "1", date: "01.02-15.02", thumb: "cheese-b" }
+      ],
+      milk: [
+        { store: "Biedronka", name: "Mleko 2% 1 l", price: "3,49", qty: "1", date: "01.02-15.02", thumb: "milk-a" },
+        { store: "Lidl", name: "Mleko 2% 1 l", price: "3,59", qty: "1", date: "01.02-15.02", thumb: "milk-b" },
+        { store: "Kaufland", name: "Mleko 2% 1 l", price: "3,39", qty: "1", date: "01.02-15.02", thumb: "milk-c" },
+        { store: "Auchan", name: "Mleko 2% 1 l", price: "3,69", qty: "1", date: "01.02-15.02", thumb: "milk-d" }
+      ]
+    };
+
+    const inlineSuggestions = [
+      { match: ["jogurt", "jogurt naturalny"], name: "Jogurt naturalny", category: "Nabiał" },
+      { match: ["mleko"], name: "Mleko", category: "Nabiał" },
+      { match: ["ser"], name: "Ser", category: "Nabiał" },
+      { match: ["jaj", "jajka"], name: "Jajka", category: "Nabiał" },
+      { match: ["banan"], name: "Banan", category: "Owoce" },
+      { match: ["pomidor"], name: "Pomidor", category: "Warzywa" },
+      { match: ["papryka"], name: "Papryka", category: "Warzywa" },
+      { match: ["kawa"], name: "Kawa", category: "Kawa" },
+      { match: ["olej"], name: "Olej", category: "Oleje" },
+      { match: ["chleb"], name: "Chleb", category: "Pieczywo" },
+      { match: ["chips"], name: "Chipsy", category: "Przekąski" }
+    ];
+
+    function getBoughtRows() {
+      return [...boughtList.querySelectorAll(".row")];
+    }
+
+    function updateBoughtCount() {
+      const count = getBoughtRows().length;
+      boughtTitle.textContent = `Kupione (${count})`;
+      emptyBought.classList.toggle("is-visible", count === 0);
+    }
+
+    function createBoughtRow(sourceRow, restoreMeta) {
+      const row = document.createElement("article");
+      const isRetailerProduct = Boolean(sourceRow.closest(".retailer"));
+      const price = sourceRow.dataset.price || "";
+      const qty = sourceRow.dataset.qty || "";
+      const hasPurchaseMeta = isRetailerProduct && price && qty;
+      row.className = `row is-adding${hasPurchaseMeta ? " has-purchase-meta" : ""}`;
+      row.dataset.name = sourceRow.dataset.name || "";
+      row.dataset.price = price;
+      row.dataset.qty = qty;
+      row.dataset.category = sourceRow.dataset.category || "";
+      row.dataset.hasPromos = sourceRow.dataset.hasPromos || "";
+      row._restoreMeta = restoreMeta;
+
+      const name = sourceRow.dataset.name || sourceRow.querySelector(".name strong")?.textContent || "Produkt";
+      const sourceMedia = sourceRow.querySelector(".category-icon, .thumb");
+      const media = sourceMedia ? sourceMedia.cloneNode(true) : document.createElement("span");
+      if (!sourceMedia) media.className = "category-icon";
+      row.innerHTML = `
+        <button class="check is-checked" aria-label="Produkt kupiony">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke-width="3">
+            <path d="m5 12 4 4 10-10"></path>
+          </svg>
+        </button>
+        <div class="item-main"><div class="name"><strong></strong></div></div>
+        ${hasPurchaseMeta ? `<span class="qty-pill">${qty}x</span><div class="price">${formatPriceHtml(price)}</div>` : ""}
+      `;
+      row.querySelector(".check").after(media);
+      row.querySelector("strong").textContent = name;
+      return row;
+    }
+
+    function getCategoryIconMarkup(category, productName = editName.value) {
+      const normalizedName = String(productName || "").trim().toLowerCase();
+
+      if (category === "Przekąski") {
+        return '<span class="chips-icon"></span>';
+      }
+
+      if (category === "Kawa") {
+        return '<span class="coffee-icon"></span>';
+      }
+
+      if (category === "Oleje") {
+        return '<span class="oil-icon"></span>';
+      }
+
+      if (category === "Owoce") {
+        return '<span class="fruit-icon"></span>';
+      }
+
+      if (category === "Warzywa") {
+        return '<span class="veg-icon"></span>';
+      }
+
+      if (category === "Pieczywo") {
+        return '<span class="chips-icon"></span>';
+      }
+
+      if (normalizedName.includes("mleko")) {
+        return '<span class="milk-icon"></span>';
+      }
+
+      return '<span class="cheese-icon"></span>';
+    }
+
+    function getCategoryVisualClass(category) {
+      if (category === "Przekąski") return "snack";
+      if (category === "Kawa") return "coffee-cat";
+      if (category === "Oleje") return "oil-cat";
+      if (category === "Owoce") return "fruit-cat";
+      if (category === "Warzywa") return "veg-cat";
+      return "";
+    }
+
+    function getRetailerSection(store) {
+      const normalized = String(store || "").toLowerCase();
+      if (normalized.includes("biedronka")) return document.querySelector('[data-od-id="biedronka-offers"]');
+      if (normalized.includes("lidl")) return document.querySelector('[data-od-id="lidl-offers"]');
+      if (normalized.includes("kaufland")) return getOrCreateRetailerSection("Kaufland", "kaufland");
+      if (normalized.includes("auchan")) return getOrCreateRetailerSection("Auchan", "auchan");
+      return document.querySelector('[data-od-id="biedronka-offers"]');
+    }
+
+    function getOrCreateRetailerSection(storeName, slug) {
+      const id = `${slug}-offers`;
+      const existing = document.querySelector(`[data-od-id="${id}"]`);
+      if (existing) return existing;
+
+      const section = document.createElement("section");
+      section.className = "card retailer";
+      section.dataset.odId = id;
+      section.setAttribute("aria-label", `Oferty ${storeName}`);
+      section.innerHTML = `
+        <div class="store-head">
+          <div class="store-logo ${slug}">${storeName}</div>
+          <div class="store-title">${storeName}</div>
+          <button class="icon-btn" aria-label="Zwiń ${storeName}">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.7">
+              <path d="m6 9 6 6 6-6"></path>
+            </svg>
+          </button>
+        </div>
+      `;
+
+      const boughtHead = document.querySelector(".section-head");
+      boughtHead.parentNode.insertBefore(section, boughtHead);
+      return section;
+    }
+
+    function createPromoListRow(promoItem) {
+      const name = promoItem.dataset.name || "Produkt z gazetki";
+      const price = promoItem.dataset.price || "0,00";
+      const qty = promoItem.dataset.qty || "1";
+      const date = promoItem.dataset.date || "";
+      const thumb = promoItem.dataset.thumb || "cheese-a";
+
+      const row = document.createElement("article");
+      row.className = "row is-adding";
+      row.dataset.name = name;
+      row.dataset.price = price;
+      row.dataset.qty = qty;
+      row.dataset.category = "Nabiał";
+
+      row.innerHTML = `
+        <button class="check" aria-label="Oznacz ${name} jako kupione">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke-width="3">
+            <path d="m5 12 4 4 10-10"></path>
+          </svg>
+        </button>
+        <div class="thumb ${thumb}"></div>
+        <div class="item-main">
+          <div class="name"><strong></strong></div>
+          <div class="date"></div>
+        </div>
+        <span class="qty-pill">${qty}x</span>
+        <div class="price">${formatPriceHtml(price)}</div>
+      `;
+
+      row.querySelector(".name strong").textContent = name;
+      row.querySelector(".date").textContent = date;
+      return row;
+    }
+
+    function createManualRow({ name, price, qty, category }) {
+      const row = document.createElement("article");
+      const hasPrice = Boolean(String(price || "").trim());
+      const count = Math.max(1, Number.parseInt(qty || "1", 10) || 1);
+      row.className = `row is-adding${hasPrice ? "" : ` no-price${count > 1 ? " has-count" : ""}`}`;
+      row.dataset.name = name;
+      row.dataset.price = price || "";
+      row.dataset.qty = String(count);
+      row.dataset.category = category;
+
+      const visualClass = getCategoryVisualClass(category);
+      const categoryClass = visualClass ? ` ${visualClass}` : "";
+      row.innerHTML = `
+        <button class="check" aria-label="Oznacz ${name} jako kupione">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke-width="3">
+            <path d="m5 12 4 4 10-10"></path>
+          </svg>
+        </button>
+        <div class="category-icon${categoryClass}">${getCategoryIconMarkup(category, name)}</div>
+        <div class="item-main">
+          <div class="name"><strong></strong></div>
+        </div>
+        ${count > 1 ? `<span class="qty-pill">${count}x</span>` : ""}
+        ${hasPrice ? `<div class="price">${formatPriceHtml(price)}</div>` : ""}
+      `;
+
+      row.querySelector(".name strong").textContent = name;
+      return row;
+    }
+
+    function createPromoItem(promo) {
+      const item = document.createElement("article");
+      item.className = "promo-item";
+      item.dataset.store = promo.store;
+      item.dataset.name = promo.name;
+      item.dataset.price = promo.price;
+      item.dataset.qty = promo.qty;
+      item.dataset.date = promo.date;
+      item.dataset.thumb = promo.thumb;
+      item.innerHTML = `
+        <div class="promo-img ${promo.thumb}" aria-hidden="true"></div>
+        <div class="promo-copy">
+          <div class="promo-store"></div>
+          <div class="promo-name"></div>
+          <div class="promo-date"></div>
+        </div>
+        <div class="promo-action">
+          <div class="price promo-price">${formatPriceHtml(promo.price)}</div>
+          <button class="promo-add" type="button" aria-label="Dodaj promocję do listy">Dodaj</button>
+        </div>
+      `;
+      item.querySelector(".promo-store").textContent = promo.store;
+      item.querySelector(".promo-name").textContent = promo.name;
+      item.querySelector(".promo-date").textContent = promo.date;
+      return item;
+    }
+
+    function createPopularItem(product) {
+      const item = document.createElement("button");
+      item.className = "popular-item";
+      item.type = "button";
+      item.dataset.name = product.name;
+      item.dataset.category = product.category;
+      item.dataset.price = product.price;
+      item.dataset.qty = product.qty;
+      item.innerHTML = `
+        <span class="popular-dot" aria-hidden="true"></span>
+        <span class="popular-copy">
+          <span class="popular-name"></span>
+        </span>
+      `;
+      item.querySelector(".popular-name").textContent = product.name;
+      return item;
+    }
+
+    function renderPopularProducts() {
+      popularGrid.innerHTML = "";
+      popularProducts.forEach((product) => {
+        popularGrid.appendChild(createPopularItem(product));
+      });
+    }
+
+    function renderPromos(row) {
+      const promoKey = row.dataset.promoKey || "";
+      const promos = promoSets[promoKey] || [];
+      promoList.innerHTML = "";
+
+      promos.slice(0, 4).forEach((promo) => {
+        promoList.appendChild(createPromoItem(promo));
+      });
+
+      if (promoKey === "milk") {
+        const more = document.createElement("button");
+        more.className = "promo-more";
+        more.type = "button";
+        more.textContent = "Zobacz wszystkie oferty";
+        promoList.appendChild(more);
+      }
+    }
+
+    function bindActiveRow(row) {
+      if (!row || row.dataset.bound === "true") return;
+      row.dataset.bound = "true";
+
+      row.addEventListener("click", (event) => {
+        if (event.target.closest(".check")) return;
+        openProductSheet(row);
+      });
+
+      const button = row.querySelector(".check");
+      button?.addEventListener("click", (event) => {
+        event.stopPropagation();
+        const sourceRow = button.closest(".row");
+        if (!sourceRow || sourceRow.classList.contains("is-removing") || button.classList.contains("is-loading")) return;
+        const restoreMeta = {
+          row: sourceRow,
+          parent: sourceRow.parentNode,
+          nextSibling: sourceRow.nextElementSibling,
+        };
+
+        button.classList.add("is-loading");
+
+        window.setTimeout(() => {
+          button.classList.remove("is-loading");
+          button.classList.add("is-checked");
+
+          window.setTimeout(() => {
+            sourceRow.classList.add("is-removing");
+
+            window.setTimeout(() => {
+              const boughtRow = createBoughtRow(sourceRow, restoreMeta);
+              const firstRow = boughtList.querySelector(".row");
+              boughtList.insertBefore(boughtRow, firstRow || emptyBought);
+              sourceRow.remove();
+              updateBoughtCount();
+              window.setTimeout(() => boughtRow.classList.remove("is-adding"), 280);
+            }, 180);
+          }, 260);
+        }, 420);
+      });
+    }
+
+    function addPromoToShoppingList(promoItem) {
+      const storeSection = getRetailerSection(promoItem.dataset.store);
+      if (!storeSection) return false;
+
+      const row = createPromoListRow(promoItem);
+      storeSection.appendChild(row);
+      bindActiveRow(row);
+      window.setTimeout(() => row.classList.remove("is-adding"), 280);
+      return true;
+    }
+
+    function formatPriceHtml(value) {
+      const normalized = String(value || "").trim().replace(".", ",");
+      const [whole = "0", centsRaw = "00"] = normalized.split(",");
+      const cents = (centsRaw + "00").slice(0, 2);
+      return `${whole || "0"}<sup>${cents}</sup>`;
+    }
+
+    function openProductSheet(row) {
+      sheetMode = "edit";
+      activeRow = row;
+      const name = row.dataset.name || row.querySelector(".name strong")?.textContent || "";
+      const price = row.dataset.price || "";
+      const qty = row.dataset.qty || "1";
+      const category = row.dataset.category || (name === "chipsy" ? "Przekąski" : "Nabiał");
+
+      sheetTitle.textContent = "Edycja produktu";
+      saveProduct.textContent = "Zapisz zmiany";
+      productSheet.classList.remove("is-add-mode");
+      editName.value = name;
+      editPrice.value = price;
+      editQty.value = qty;
+      editCategory.value = category;
+      editCategoryIcon.className = `field-category-icon ${getCategoryVisualClass(category)}`.trim();
+      editCategoryIcon.innerHTML = getCategoryIconMarkup(category, name);
+      const hasPromos = row.dataset.hasPromos === "true";
+      promoBlock.classList.toggle("is-visible", hasPromos);
+      if (hasPromos) renderPromos(row);
+
+      productSheet.classList.add("is-open");
+      productSheet.setAttribute("aria-hidden", "false");
+    }
+
+    function openPopularProductSheet() {
+      sheetMode = "pick";
+      activeRow = null;
+      sheetTitle.textContent = "Dodaj produkt";
+      productSheet.classList.add("is-pick-mode");
+      productSheet.classList.remove("is-add-mode");
+      renderPopularProducts();
+      productSheet.classList.add("is-open");
+      productSheet.setAttribute("aria-hidden", "false");
+    }
+
+    function openAddProductSheet(preset = {}) {
+      sheetMode = "add";
+      activeRow = null;
+      sheetTitle.textContent = "Dodaj produkt";
+      saveProduct.textContent = "Dodaj do listy";
+      productSheet.classList.add("is-add-mode");
+      productSheet.classList.remove("is-pick-mode");
+      editName.value = preset.name || "";
+      editPrice.value = preset.price || "";
+      editQty.value = preset.qty || "1";
+      editCategory.value = preset.category || "Nabiał";
+      editCategoryIcon.className = `field-category-icon ${getCategoryVisualClass(editCategory.value)}`.trim();
+      editCategoryIcon.innerHTML = getCategoryIconMarkup(editCategory.value, editName.value);
+      promoBlock.classList.remove("is-visible");
+      promoList.innerHTML = "";
+      productSheet.classList.add("is-open");
+      productSheet.setAttribute("aria-hidden", "false");
+      window.setTimeout(() => {
+        if (editName.value) {
+          editPrice.focus();
+        } else {
+          editName.focus();
+        }
+      }, 260);
+    }
+
+    function closeProductSheet() {
+      productSheet.classList.remove("is-open");
+      productSheet.classList.remove("is-add-mode");
+      productSheet.classList.remove("is-pick-mode");
+      productSheet.setAttribute("aria-hidden", "true");
+      activeRow = null;
+      sheetMode = "edit";
+    }
+
+    function openInlineAdd() {
+      inlineAdd.classList.add("is-open");
+      window.setTimeout(() => inlineName.focus(), 80);
+    }
+
+    function closeInlineAdd() {
+      inlineAdd.classList.remove("is-open");
+      inlineAddForm.reset();
+      hideInlineSuggestion();
+      inlineName.blur();
+    }
+
+    function toggleInlineAdd() {
+      if (inlineAdd.classList.contains("is-open")) {
+        closeInlineAdd();
+      } else {
+        openInlineAdd();
+      }
+    }
+
+    function normalizeProductName(name) {
+      return String(name || "").trim().toLocaleLowerCase("pl-PL");
+    }
+
+    function getInlineSuggestion(value) {
+      const query = normalizeProductName(value);
+      if (!query) return null;
+
+      const matched = inlineSuggestions.find((item) =>
+        item.match.some((token) => normalizeProductName(token).includes(query) || query.includes(normalizeProductName(token)))
+      );
+
+      if (matched) return matched;
+
+      return {
+        name: value.trim(),
+        category: "Nabiał",
+      };
+    }
+
+    function hideInlineSuggestion() {
+      inlineSuggestion.classList.remove("is-visible");
+      inlineSuggestion.dataset.name = "";
+      inlineSuggestion.dataset.category = "";
+      inlineSuggestion.querySelector(".suggestion-dot").innerHTML = "";
+      inlineSuggestion.querySelector(".suggestion-name").textContent = "";
+    }
+
+    function renderInlineSuggestion() {
+      const suggestion = getInlineSuggestion(inlineName.value);
+      if (!suggestion) {
+        hideInlineSuggestion();
+        return;
+      }
+
+      inlineSuggestion.dataset.name = suggestion.name;
+      inlineSuggestion.dataset.category = suggestion.category;
+      inlineSuggestion.querySelector(".suggestion-dot").innerHTML = getCategoryIconMarkup(suggestion.category, suggestion.name);
+      inlineSuggestion.querySelector(".suggestion-name").textContent = suggestion.name;
+      inlineSuggestion.classList.add("is-visible");
+    }
+
+    function findManualProductByName(name) {
+      const normalized = normalizeProductName(name);
+      return Array.from(document.querySelectorAll('[data-od-id="manual-products"] > .row'))
+        .find((row) => normalizeProductName(row.dataset.name) === normalized);
+    }
+
+    function incrementManualProduct(row) {
+      const existingQtyNode = row.querySelector(":scope > .qty-pill");
+      const currentQty = existingQtyNode ? Number.parseInt(row.dataset.qty || "1", 10) || 1 : 1;
+      const nextQty = currentQty + 1;
+      row.dataset.qty = String(nextQty);
+      row.classList.add("has-count");
+
+      let qtyNode = existingQtyNode;
+      if (!qtyNode) {
+        qtyNode = document.createElement("span");
+        qtyNode.className = "qty-pill";
+        const priceNode = row.querySelector(":scope > .price");
+        if (priceNode) {
+          row.insertBefore(qtyNode, priceNode);
+        } else {
+          row.appendChild(qtyNode);
+        }
+      }
+
+      qtyNode.textContent = `${nextQty}x`;
+      row.classList.add("is-adding");
+      window.setTimeout(() => row.classList.remove("is-adding"), 280);
+    }
+
+    function syncRowQtyPill(row, qty) {
+      const count = Math.max(1, Number.parseInt(qty || "1", 10) || 1);
+      row.dataset.qty = String(count);
+
+      let qtyNode = row.querySelector(":scope > .qty-pill");
+      if (count <= 1) {
+        if (qtyNode) qtyNode.remove();
+        row.classList.remove("has-count");
+        return;
+      }
+
+      if (!qtyNode) {
+        qtyNode = document.createElement("span");
+        qtyNode.className = "qty-pill";
+        const priceNode = row.querySelector(":scope > .price");
+        if (priceNode) {
+          row.insertBefore(qtyNode, priceNode);
+        } else {
+          row.appendChild(qtyNode);
+        }
+      }
+
+      qtyNode.textContent = `${count}x`;
+      row.classList.add("has-count");
+    }
+
+    function addInlineProduct({ name, category }) {
+      const cleanName = String(name || "").trim();
+      if (!cleanName) return false;
+
+      const existingRow = findManualProductByName(cleanName);
+      if (existingRow) {
+        incrementManualProduct(existingRow);
+        return true;
+      }
+
+      const row = createManualRow({
+        name: cleanName,
+        price: "",
+        qty: "1",
+        category: category || "Nabiał",
+      });
+      const manualCard = document.querySelector('[data-od-id="manual-products"]');
+      const firstProduct = manualCard.querySelector(".row");
+      manualCard.insertBefore(row, firstProduct || null);
+      bindActiveRow(row);
+      window.setTimeout(() => row.classList.remove("is-adding"), 280);
+      return true;
+    }
+
+    function submitInlineProduct() {
+      const suggestion = getInlineSuggestion(inlineName.value);
+      if (!suggestion) {
+        inlineName.focus();
+        return;
+      }
+
+      if (addInlineProduct({ name: suggestion.name, category: suggestion.category })) {
+        inlineAddForm.reset();
+        hideInlineSuggestion();
+        inlineName.focus();
+      }
+    }
+
+    function changeStepperValue(stepper, direction) {
+      const input = stepper.querySelector("input");
+      const delta = direction === "increase" ? 1 : -1;
+
+      const currentQty = Number.parseInt(input.value || "1", 10);
+      const nextQty = Math.max(1, (Number.isFinite(currentQty) ? currentQty : 1) + delta);
+      input.value = String(nextQty);
+    }
+
+    function saveActiveProduct() {
+      const name = editName.value.trim() || "Produkt";
+      const price = editPrice.value.trim() || activeRow?.dataset.price || "0,00";
+      const qty = Math.max(1, Number.parseInt(editQty.value || "1", 10) || 1);
+      const category = editCategory.value;
+
+      if (sheetMode === "add") {
+        const row = createManualRow({ name, price, qty, category });
+        const manualCard = document.querySelector('[data-od-id="manual-products"]');
+        const firstProduct = manualCard.querySelector(".row");
+        manualCard.insertBefore(row, firstProduct || null);
+        bindActiveRow(row);
+        closeProductSheet();
+        window.setTimeout(() => row.classList.remove("is-adding"), 280);
+        return;
+      }
+
+      if (!activeRow) return;
+
+      activeRow.dataset.name = name;
+      activeRow.dataset.price = price;
+      activeRow.dataset.category = category;
+
+      const nameNode = activeRow.querySelector(".name strong");
+      if (nameNode) nameNode.textContent = name;
+
+      const priceNode = activeRow.querySelector(".price");
+      if (priceNode) priceNode.innerHTML = formatPriceHtml(price);
+
+      syncRowQtyPill(activeRow, qty);
+
+      const categoryNode = activeRow.querySelector(".category-icon");
+      if (categoryNode) {
+        categoryNode.className = `category-icon ${getCategoryVisualClass(category)}`.trim();
+        categoryNode.innerHTML = getCategoryIconMarkup(category, name);
+      }
+
+      closeProductSheet();
+    }
+
+    function deleteActiveProduct() {
+      if (!activeRow || activeRow.classList.contains("is-removing")) return;
+      const rowToDelete = activeRow;
+      closeProductSheet();
+      rowToDelete.classList.add("is-removing");
+      window.setTimeout(() => {
+        rowToDelete.remove();
+      }, 180);
+    }
+
+    function restoreSourceRow(boughtRow) {
+      const restoreMeta = boughtRow._restoreMeta;
+      boughtRow.classList.add("is-removing");
+
+      window.setTimeout(() => {
+        if (restoreMeta?.row && restoreMeta?.parent) {
+          const { row, parent, nextSibling } = restoreMeta;
+          row.classList.remove("is-removing");
+          row.querySelector(".check")?.classList.remove("is-checked");
+
+          if (nextSibling && nextSibling.parentNode === parent) {
+            parent.insertBefore(row, nextSibling);
+          } else {
+            parent.appendChild(row);
+          }
+
+          row.classList.add("is-adding");
+          window.setTimeout(() => row.classList.remove("is-adding"), 280);
+        }
+
+        boughtRow.remove();
+        updateBoughtCount();
+      }, 160);
+    }
+
+    document.querySelectorAll("main .card:not(.bought) .row").forEach(bindActiveRow);
+
+    boughtList.addEventListener("click", (event) => {
+      const boughtRow = event.target.closest(".row");
+      if (!boughtRow || boughtRow.classList.contains("is-removing")) return;
+      restoreSourceRow(boughtRow);
+    });
+
+    sheetClose.addEventListener("click", closeProductSheet);
+    addProductRow.addEventListener("click", toggleInlineAdd);
+    inlineAddForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+      submitInlineProduct();
+    });
+    inlineName.addEventListener("input", renderInlineSuggestion);
+    inlineSuggestion.addEventListener("click", () => {
+      const name = inlineSuggestion.dataset.name;
+      const category = inlineSuggestion.dataset.category;
+      if (addInlineProduct({ name, category })) {
+        inlineName.value = "";
+        hideInlineSuggestion();
+        inlineName.focus();
+      }
+    });
+    inlineAddForm.querySelectorAll("[data-quick-name]").forEach((button) => {
+      button.addEventListener("click", () => {
+        if (addInlineProduct({
+          name: button.dataset.quickName,
+          category: button.dataset.quickCategory,
+        })) {
+          inlineName.focus();
+        }
+      });
+    });
+    saveProduct.addEventListener("click", saveActiveProduct);
+    deleteProduct.addEventListener("click", deleteActiveProduct);
+
+    editCategory.addEventListener("change", () => {
+      const category = editCategory.value;
+      editCategoryIcon.className = `field-category-icon ${getCategoryVisualClass(category)}`.trim();
+      editCategoryIcon.innerHTML = getCategoryIconMarkup(category, editName.value);
+    });
+
+    editName.addEventListener("input", () => {
+      editCategoryIcon.innerHTML = getCategoryIconMarkup(editCategory.value, editName.value);
+    });
+
+    popularGrid.addEventListener("click", (event) => {
+      const item = event.target.closest(".popular-item");
+      if (!item) return;
+      openAddProductSheet({
+        name: item.dataset.name,
+        category: item.dataset.category,
+        price: item.dataset.price,
+        qty: item.dataset.qty,
+      });
+    });
+
+    document.querySelectorAll(".stepper-btn").forEach((button) => {
+      button.addEventListener("click", (event) => {
+        event.stopPropagation();
+        const stepper = button.closest(".stepper");
+        if (!stepper) return;
+        changeStepperValue(stepper, button.dataset.stepAction);
+      });
+    });
+
+    promoList.addEventListener("click", (event) => {
+      const button = event.target.closest(".promo-add");
+      if (!button) return;
+      event.stopPropagation();
+      if (button.classList.contains("is-added")) return;
+
+      const promoItem = button.closest(".promo-item");
+      if (!promoItem || !addPromoToShoppingList(promoItem)) return;
+
+      promoItem.classList.add("is-added");
+      button.classList.add("is-added");
+      button.textContent = "✓ Dodano";
+      button.setAttribute("aria-label", "Promocja dodana do listy");
+    });
+
+    productSheet.addEventListener("click", (event) => {
+      if (event.target === productSheet) closeProductSheet();
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && productSheet.classList.contains("is-open")) {
+        closeProductSheet();
+      }
+      if (event.key === "Escape" && inlineAdd.classList.contains("is-open")) {
+        closeInlineAdd();
+      }
+    });
+
+    document.addEventListener("click", (event) => {
+      if (!inlineAdd.classList.contains("is-open")) return;
+      if (inlineAdd.contains(event.target)) return;
+      closeInlineAdd();
+    });
+
+    updateBoughtCount();
+  </script>
+</body>
+</html>
