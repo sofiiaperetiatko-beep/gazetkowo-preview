@@ -2164,7 +2164,7 @@
           ${retailerName ? `<div class="bought-store"></div>` : ""}
           <div class="name"><strong></strong></div>
         </div>
-        ${hasPurchaseMeta ? `<span class="qty-pill">${qty}x</span><div class="price">${formatPriceHtml(price)}</div>` : ""}
+        ${hasPurchaseMeta ? `${Number.parseInt(qty, 10) > 1 ? `<span class="qty-pill">${qty}x</span>` : ""}<div class="price">${formatPriceHtml(price)}</div>` : ""}
       `;
       row.querySelector(".check").after(media);
       row.querySelector("strong").textContent = name;
@@ -2354,7 +2354,7 @@
           <div class="name"><strong></strong></div>
           <div class="date"></div>
         </div>
-        <span class="qty-pill">${qty}x</span>
+        ${Number.parseInt(qty, 10) > 1 ? `<span class="qty-pill">${qty}x</span>` : ""}
         <div class="price">${formatPriceHtml(price)}</div>
       `;
 
