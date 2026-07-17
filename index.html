@@ -325,6 +325,32 @@
       box-shadow: 0 0 0 2px rgba(255, 202, 5, 0.24);
     }
 
+    .inline-input-wrap {
+      position: relative;
+    }
+
+    .inline-input-wrap .inline-input {
+      padding-right: 38px;
+    }
+
+    .inline-input-clear {
+      position: absolute;
+      right: 3px;
+      top: 50%;
+      width: 30px;
+      height: 30px;
+      display: grid;
+      place-items: center;
+      border-radius: var(--radius-pill);
+      color: var(--mock-muted);
+      cursor: pointer;
+      transform: translateY(-50%);
+    }
+
+    .inline-input-clear:active {
+      background: var(--mock-line);
+    }
+
     .inline-row {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -1613,7 +1639,12 @@
           <form class="inline-add-form" id="inlineAddForm">
             <div class="inline-field">
               <label for="inlineName">Nazwa</label>
-              <input class="inline-input" id="inlineName" name="name" type="text" placeholder="Wpisz produkt" autocomplete="off">
+              <div class="inline-input-wrap">
+                <input class="inline-input" id="inlineName" name="name" type="text" placeholder="Wpisz produkt" autocomplete="off">
+                <button class="inline-input-clear" id="inlineAddClose" type="button" aria-label="Zamknij dodawanie produktu">
+                  <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.8"><path d="M6 6l12 12M18 6 6 18"/></svg>
+                </button>
+              </div>
             </div>
             <button class="inline-suggestion" id="inlineSuggestion" type="button" aria-live="polite">
               <span class="suggestion-dot" aria-hidden="true"></span>
@@ -1800,6 +1831,7 @@
     const inlineAdd = document.querySelector("#inlineAdd");
     const inlineAddForm = document.querySelector("#inlineAddForm");
     const inlineName = document.querySelector("#inlineName");
+    const inlineAddClose = document.querySelector("#inlineAddClose");
     const inlineSuggestion = document.querySelector("#inlineSuggestion");
     const sheetTitle = document.querySelector("#sheetTitle");
     let activeRow = null;
@@ -2642,6 +2674,7 @@
 
     sheetClose.addEventListener("click", closeProductSheet);
     addProductRow.addEventListener("click", toggleInlineAdd);
+    inlineAddClose.addEventListener("click", closeInlineAdd);
     inlineAddForm.addEventListener("submit", (event) => {
       event.preventDefault();
       submitInlineProduct();
