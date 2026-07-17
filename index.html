@@ -2373,12 +2373,19 @@
     }
 
     function closeProductSheet() {
+      const promoWasAdded = Boolean(promoList.querySelector(".promo-item.is-added"));
+      const rowToRemove = activeRow && !activeRow.classList.contains("is-removing") && promoWasAdded ? activeRow : null;
+
       productSheet.classList.remove("is-open");
       productSheet.classList.remove("is-add-mode");
       productSheet.classList.remove("is-pick-mode");
       productSheet.setAttribute("aria-hidden", "true");
       activeRow = null;
       sheetMode = "edit";
+
+      if (rowToRemove) {
+        collapseRow(rowToRemove, () => rowToRemove.remove());
+      }
     }
 
     function openInlineAdd() {
@@ -2591,11 +2598,9 @@
     function deleteActiveProduct() {
       if (!activeRow || activeRow.classList.contains("is-removing")) return;
       const rowToDelete = activeRow;
-      closeProductSheet();
       rowToDelete.classList.add("is-removing");
-      window.setTimeout(() => {
-        rowToDelete.remove();
-      }, 180);
+      closeProductSheet();
+      collapseRow(rowToDelete, () => rowToDelete.remove());
     }
 
     function restoreSourceRow(boughtRow) {
