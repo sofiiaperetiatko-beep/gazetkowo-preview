@@ -795,19 +795,14 @@
       text-align: center;
     }
 
-    .store-logo.biedronka {
-      background: var(--mock-yellow);
-      color: var(--mock-red);
-      border: 1px solid var(--mock-red);
+    .store-logo img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
     }
 
     .store-logo.lidl {
-      border-radius: 0;
-      background: var(--mock-lidl-blue);
-      color: var(--mock-yellow);
-      border: 2px solid var(--mock-yellow);
-      font-size: 6px;
-      letter-spacing: -0.08em;
+      border-radius: 4px;
     }
 
     .store-logo.kaufland {
@@ -859,23 +854,11 @@
       box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.06);
     }
 
-    .thumb.coffee {
-      background:
-        linear-gradient(135deg, var(--mock-product-blue) 0 45%, transparent 46%),
-        linear-gradient(160deg, var(--mock-product-cream) 0 55%, var(--mock-product-red) 56% 100%);
-    }
-
-    .thumb.juice {
-      background:
-        linear-gradient(160deg, var(--mock-product-cream-2) 0 35%, transparent 36%),
-        linear-gradient(135deg, var(--mock-product-red-2) 0 72%, var(--mock-product-yellow) 73% 100%);
-    }
-
-    .thumb.butter {
-      background:
-        linear-gradient(135deg, var(--mock-product-blue) 0 45%, transparent 46%),
-        linear-gradient(160deg, var(--mock-product-cream-3) 0 58%, var(--mock-product-white) 59% 100%);
-      color: var(--mock-ink);
+    .thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: inherit;
     }
 
     .thumb.cheese-a {
@@ -1659,20 +1642,20 @@
 
       <section class="card retailer" data-od-id="biedronka-offers" aria-label="Oferty Biedronka">
         <div class="store-head">
-          <div class="store-logo biedronka">Biedronka</div>
+          <div class="store-logo biedronka"><img src="img/biedronka-logo.png" alt="Biedronka"></div>
           <div class="store-title">Biedronka</div>
           <button class="icon-btn" aria-label="Zwiń Biedronka"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.7"><path d="m6 9 6 6 6-6"/></svg></button>
         </div>
         <article class="row" data-name="Kawa Tchibo family" data-price="11,99" data-qty="2" data-category="Kawa">
           <button class="check" aria-label="Oznacz Kawa Tchibo family jako kupione"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke-width="3"><path d="m5 12 4 4 10-10"/></svg></button>
-          <div class="thumb coffee">Tchibo<br>Family</div>
+          <div class="thumb coffee"><img src="img/kawa.png" alt="Kawa Tchibo Family"></div>
           <div class="item-main"><div class="name"><strong>Kawa Tchibo family</strong></div><div class="date">01.02-15.02</div></div>
           <span class="qty-pill">2x</span>
           <div class="price">11<sup>99</sup></div>
         </article>
         <article class="row" data-name="sok Kubuś" data-price="4,99" data-qty="2" data-category="Napoje">
           <button class="check" aria-label="Oznacz sok Kubuś jako kupione"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke-width="3"><path d="m5 12 4 4 10-10"/></svg></button>
-          <div class="thumb juice">Kubuś</div>
+          <div class="thumb juice"><img src="img/sok.png" alt="Sok Kubuś"></div>
           <div class="item-main"><div class="name"><strong>sok Kubuś</strong></div><div class="date">01.02-15.02</div></div>
           <span class="qty-pill">2x</span>
           <div class="price">4<sup>99</sup></div>
@@ -1681,13 +1664,13 @@
 
       <section class="card retailer" data-od-id="lidl-offers" aria-label="Oferty Lidl">
         <div class="store-head">
-          <div class="store-logo lidl">Lidl</div>
+          <div class="store-logo lidl"><img src="img/lidl-logo.png" alt="Lidl"></div>
           <div class="store-title">Lidl</div>
           <button class="icon-btn" aria-label="Zwiń Lidl"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.7"><path d="m6 9 6 6 6-6"/></svg></button>
         </div>
         <article class="row" data-name="masło" data-price="11,99" data-qty="2" data-category="Nabiał">
           <button class="check" aria-label="Oznacz masło jako kupione"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke-width="3"><path d="m5 12 4 4 10-10"/></svg></button>
-          <div class="thumb butter">Pilos</div>
+          <div class="thumb butter"><img src="img/maslo.png" alt="Masło Pilos"></div>
           <div class="item-main"><div class="name"><strong>masło</strong></div><div class="date">01.02-15.02</div></div>
           <span class="qty-pill">2x</span>
           <div class="price">11<sup>99</sup></div>
