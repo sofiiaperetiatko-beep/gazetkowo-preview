@@ -347,8 +347,35 @@
       transform: translateY(-50%);
     }
 
+    .inline-input-clear.is-hidden {
+      display: none;
+    }
+
     .inline-input-clear:active {
       background: var(--mock-line);
+    }
+
+    .inline-input-submit {
+      position: absolute;
+      right: 8px;
+      top: 50%;
+      width: 30px;
+      height: 30px;
+      display: grid;
+      place-items: center;
+      border-radius: var(--radius-pill);
+      background: var(--mock-yellow);
+      color: var(--mock-ink);
+      cursor: pointer;
+      transform: translateY(-50%);
+    }
+
+    .inline-input-submit.is-hidden {
+      display: none;
+    }
+
+    .inline-input-submit:active {
+      transform: translateY(-50%) scale(0.92);
     }
 
     .inline-row {
@@ -531,35 +558,6 @@
 
     .check.is-checked svg {
       opacity: 1;
-      animation: check-pop 0.32s var(--ease-standard);
-    }
-
-    .check.is-loading {
-      border-color: transparent;
-      background: var(--surface);
-    }
-
-    .check.is-loading svg { opacity: 0; }
-
-    .check.is-loading::before {
-      content: "";
-      position: absolute;
-      inset: -2px;
-      border-radius: var(--radius-pill);
-      border: 2px solid var(--border-soft);
-      border-top-color: var(--mock-yellow);
-      border-right-color: var(--mock-yellow);
-      animation: check-spin 0.55s linear infinite;
-    }
-
-    @keyframes check-spin {
-      to { transform: rotate(360deg); }
-    }
-
-    @keyframes check-pop {
-      0% { transform: translate(-50%, -50%) scale(0.3); opacity: 0; }
-      55% { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
-      100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
     }
 
     .category-icon,
@@ -1261,15 +1259,6 @@
       gap: 5px;
     }
 
-    .name-input-wrap {
-      position: relative;
-      display: block;
-    }
-
-    .name-input-wrap input {
-      padding-right: 40px;
-    }
-
     .field-category-icon {
       position: absolute;
       right: 10px;
@@ -1303,8 +1292,7 @@
       font-weight: 700;
     }
 
-    .edit-field input,
-    .edit-field select {
+    .edit-field input {
       width: 100%;
       height: 42px;
       border: 1px solid var(--mock-line);
@@ -1318,17 +1306,102 @@
       outline: none;
     }
 
-    .edit-field select {
-      appearance: none;
-      background-image:
-        linear-gradient(45deg, transparent 50%, var(--mock-muted) 50%),
-        linear-gradient(135deg, var(--mock-muted) 50%, transparent 50%);
-      background-position:
-        calc(100% - 17px) 18px,
-        calc(100% - 12px) 18px;
-      background-size: 5px 5px, 5px 5px;
-      background-repeat: no-repeat;
-      padding-inline: 12px;
+    .category-picker {
+      position: relative;
+    }
+
+    .category-trigger {
+      width: 100%;
+      height: 42px;
+      display: grid;
+      grid-template-columns: 20px minmax(0, 1fr) 16px;
+      align-items: center;
+      gap: 10px;
+      padding: 0 12px;
+      border: 1px solid var(--mock-line);
+      border-radius: 12px;
+      background: var(--mock-bg);
+      color: var(--mock-ink);
+      cursor: pointer;
+    }
+
+    .category-trigger .field-category-icon {
+      position: static;
+      transform: none;
+    }
+
+    .category-trigger-name {
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      text-align: left;
+      font-family: var(--font-body);
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--mock-ink);
+    }
+
+    .category-trigger-chevron {
+      color: var(--mock-muted);
+      transition: transform var(--motion-base) var(--ease-standard);
+    }
+
+    .category-picker.is-open .category-trigger-chevron {
+      transform: rotate(180deg);
+    }
+
+    .category-picker.is-open .category-trigger {
+      border-color: var(--mock-yellow);
+      box-shadow: 0 0 0 2px rgba(247, 202, 52, 0.28);
+    }
+
+    .category-options {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: calc(100% + 6px);
+      max-height: 240px;
+      overflow-y: auto;
+      display: none;
+      flex-direction: column;
+      gap: 2px;
+      padding: 6px;
+      border: 1px solid var(--mock-line);
+      border-radius: 14px;
+      background: var(--surface);
+      box-shadow: rgba(0, 0, 0, 0.14) 0 14px 32px;
+      z-index: 5;
+    }
+
+    .category-picker.is-open .category-options {
+      display: flex;
+    }
+
+    .category-option {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-height: 40px;
+      padding: 6px 8px;
+      border-radius: 10px;
+      background: transparent;
+      color: var(--mock-ink);
+      font-family: var(--font-body);
+      font-size: 14px;
+      font-weight: 700;
+      text-align: left;
+      cursor: pointer;
+    }
+
+    .category-option .field-category-icon {
+      position: static;
+      transform: none;
+      flex: 0 0 auto;
+    }
+
+    .category-option.is-selected {
+      background: #FDF2D1;
     }
 
     .stepper {
@@ -1384,8 +1457,7 @@
       background: var(--mock-yellow-soft);
     }
 
-    .edit-field input:focus,
-    .edit-field select:focus {
+    .edit-field input:focus {
       border-color: var(--mock-yellow);
       box-shadow: 0 0 0 2px rgba(247, 202, 52, 0.28);
     }
@@ -1644,6 +1716,9 @@
                 <button class="inline-input-clear" id="inlineAddClose" type="button" aria-label="Zamknij dodawanie produktu">
                   <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.8"><path d="M6 6l12 12M18 6 6 18"/></svg>
                 </button>
+                <button class="inline-input-submit is-hidden" id="inlineAddSubmit" type="button" aria-label="Dodaj produkt do listy">
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.8"><path d="M12 5v14M5 12h14"/></svg>
+                </button>
               </div>
             </div>
             <button class="inline-suggestion" id="inlineSuggestion" type="button" aria-live="polite">
@@ -1761,12 +1836,7 @@
         <div class="edit-grid">
           <div class="edit-field">
             <label for="editName">Nazwa</label>
-            <div class="name-input-wrap">
-              <input id="editName" type="text" value="">
-              <span class="field-category-icon" id="editCategoryIcon" aria-hidden="true">
-                <span class="cheese-icon"></span>
-              </span>
-            </div>
+            <input id="editName" type="text" value="">
           </div>
           <div class="edit-field-row">
             <div class="edit-field">
@@ -1783,16 +1853,18 @@
             </div>
           </div>
           <div class="edit-field">
-            <label for="editCategory">Kategoria</label>
-            <select id="editCategory">
-              <option>Nabiał</option>
-              <option>Przekąski</option>
-              <option>Kawa</option>
-              <option>Napoje</option>
-              <option>Owoce</option>
-              <option>Warzywa</option>
-              <option>Oleje</option>
-            </select>
+            <label id="categoryFieldLabel">Kategoria</label>
+            <input type="hidden" id="editCategory" value="Nabiał">
+            <div class="category-picker" id="categoryPicker">
+              <button type="button" class="category-trigger" id="categoryTrigger" aria-haspopup="listbox" aria-expanded="false" aria-labelledby="categoryFieldLabel">
+                <span class="field-category-icon" id="editCategorySelectIcon" aria-hidden="true">
+                  <span class="cheese-icon"></span>
+                </span>
+                <span class="category-trigger-name" id="categoryTriggerName">Nabiał</span>
+                <svg class="category-trigger-chevron" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.7" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+              </button>
+              <div class="category-options" id="categoryOptions" role="listbox"></div>
+            </div>
           </div>
         </div>
 
@@ -1821,7 +1893,11 @@
     const editPrice = document.querySelector("#editPrice");
     const editQty = document.querySelector("#editQty");
     const editCategory = document.querySelector("#editCategory");
-    const editCategoryIcon = document.querySelector("#editCategoryIcon");
+    const editCategorySelectIcon = document.querySelector("#editCategorySelectIcon");
+    const categoryPicker = document.querySelector("#categoryPicker");
+    const categoryTrigger = document.querySelector("#categoryTrigger");
+    const categoryTriggerName = document.querySelector("#categoryTriggerName");
+    const categoryOptionsEl = document.querySelector("#categoryOptions");
     const popularGrid = document.querySelector("#popularGrid");
     const promoBlock = document.querySelector("#promoBlock");
     const promoList = document.querySelector("#promoList");
@@ -1832,6 +1908,7 @@
     const inlineAddForm = document.querySelector("#inlineAddForm");
     const inlineName = document.querySelector("#inlineName");
     const inlineAddClose = document.querySelector("#inlineAddClose");
+    const inlineAddSubmit = document.querySelector("#inlineAddSubmit");
     const inlineSuggestion = document.querySelector("#inlineSuggestion");
     const sheetTitle = document.querySelector("#sheetTitle");
     let activeRow = null;
@@ -2019,7 +2096,7 @@
     function getCategoryIconMarkup(category, productName = editName.value) {
       const normalizedName = String(productName || "").trim().toLowerCase();
 
-      if (category === "Przekąski") {
+      if (category === "Słodycze i przekąski" || category === "Przekąski") {
         return '<span class="chips-icon"></span>';
       }
 
@@ -2031,7 +2108,7 @@
         return '<span class="oil-icon"></span>';
       }
 
-      if (category === "Owoce") {
+      if (category === "Warzywa i owoce" || category === "Owoce") {
         return '<span class="fruit-icon"></span>';
       }
 
@@ -2051,12 +2128,91 @@
     }
 
     function getCategoryVisualClass(category) {
-      if (category === "Przekąski") return "snack";
+      if (category === "Słodycze i przekąski" || category === "Przekąski") return "snack";
       if (category === "Kawa") return "coffee-cat";
       if (category === "Oleje") return "oil-cat";
-      if (category === "Owoce") return "fruit-cat";
+      if (category === "Warzywa i owoce" || category === "Owoce") return "fruit-cat";
       if (category === "Warzywa") return "veg-cat";
       return "";
+    }
+
+    function syncCategoryIcons(category, name = editName.value) {
+      editCategorySelectIcon.className = `field-category-icon ${getCategoryVisualClass(category)}`.trim();
+      editCategorySelectIcon.innerHTML = getCategoryIconMarkup(category, name);
+    }
+
+    const CATEGORY_OPTIONS = [
+      "Art. spożywcze",
+      "Nabiał",
+      "Warzywa i owoce",
+      "Pieczywo",
+      "Mięso",
+      "Mrożonki",
+      "Słodycze i przekąski",
+      "Dziecko",
+      "Chemia, kosmetyki",
+      "Art. przemysłowe",
+      "Napoje, soki i woda",
+      "Alkohol",
+      "Zwierzęta",
+      "Ryby",
+      "Dom i ogród",
+      "Zdrowie",
+      "RTV i AGD",
+      "Inne",
+    ];
+
+    function renderCategoryOptions() {
+      categoryOptionsEl.innerHTML = "";
+      CATEGORY_OPTIONS.forEach((name) => {
+        const option = document.createElement("button");
+        option.type = "button";
+        option.className = "category-option";
+        option.setAttribute("role", "option");
+        option.dataset.category = name;
+        option.innerHTML = `
+          <span class="field-category-icon ${getCategoryVisualClass(name)}" aria-hidden="true">${getCategoryIconMarkup(name, "")}</span>
+          <span class="category-option-name"></span>
+        `;
+        option.querySelector(".category-option-name").textContent = name;
+        option.addEventListener("click", () => {
+          setCategoryValue(name);
+          closeCategoryPicker();
+        });
+        categoryOptionsEl.appendChild(option);
+      });
+    }
+
+    function updateCategoryOptionHighlight() {
+      categoryOptionsEl.querySelectorAll(".category-option").forEach((option) => {
+        option.classList.toggle("is-selected", option.dataset.category === editCategory.value);
+      });
+    }
+
+    function setCategoryValue(category, name = editName.value) {
+      editCategory.value = category;
+      categoryTriggerName.textContent = category;
+      syncCategoryIcons(category, name);
+      updateCategoryOptionHighlight();
+    }
+
+    function openCategoryPicker() {
+      updateCategoryOptionHighlight();
+      categoryPicker.classList.add("is-open");
+      categoryTrigger.setAttribute("aria-expanded", "true");
+    }
+
+    function closeCategoryPicker() {
+      categoryPicker.classList.remove("is-open");
+      categoryTrigger.setAttribute("aria-expanded", "false");
+    }
+
+    function toggleCategoryPicker() {
+      if (categoryPicker.classList.contains("is-open")) {
+        closeCategoryPicker();
+      } else {
+        openCategoryPicker();
+      }
     }
 
     function getRetailerSection(store) {
@@ -2241,43 +2397,24 @@
       button?.addEventListener("click", (event) => {
         event.stopPropagation();
         const sourceRow = button.closest(".row");
-        if (!sourceRow || sourceRow.classList.contains("is-removing") || button.classList.contains("is-loading")) return;
+        if (!sourceRow) return;
         const restoreMeta = {
           row: sourceRow,
           parent: sourceRow.parentNode,
           nextSibling: sourceRow.nextElementSibling,
         };
 
-        button.classList.add("is-loading");
+        const parent = restoreMeta.parent;
+        const boughtRow = createBoughtRow(sourceRow, restoreMeta);
+        const firstRow = boughtList.querySelector(".row");
+        boughtList.insertBefore(boughtRow, firstRow || emptyBought);
+        boughtRow.classList.remove("is-adding");
+        sourceRow.remove();
+        updateBoughtCount();
 
-        window.setTimeout(() => {
-          button.classList.remove("is-loading");
-          button.classList.add("is-checked");
-
-          window.setTimeout(() => {
-            const parent = restoreMeta.parent;
-            const isLastInSection = parent.classList.contains("retailer") && parent.querySelectorAll(".row").length === 1;
-
-            const moveToBought = () => {
-              const boughtRow = createBoughtRow(sourceRow, restoreMeta);
-              const firstRow = boughtList.querySelector(".row");
-              boughtList.insertBefore(boughtRow, firstRow || emptyBought);
-              sourceRow.remove();
-              updateBoughtCount();
-              expandRow(boughtRow);
-              window.setTimeout(() => boughtRow.classList.remove("is-adding"), 220);
-            };
-
-            if (isLastInSection) {
-              collapseSection(parent, () => {
-                parent.style.display = "none";
-                moveToBought();
-              });
-            } else {
-              collapseRow(sourceRow, moveToBought);
-            }
-          }, 260);
-        }, 420);
+        if (parent.classList.contains("retailer") && !parent.querySelector(".row")) {
+          parent.style.display = "none";
+        }
       });
     }
 
@@ -2324,9 +2461,7 @@
       editName.value = name;
       editPrice.value = price;
       editQty.value = qty;
-      editCategory.value = category;
-      editCategoryIcon.className = `field-category-icon ${getCategoryVisualClass(category)}`.trim();
-      editCategoryIcon.innerHTML = getCategoryIconMarkup(category, name);
+      setCategoryValue(category, name);
       const hasPromos = row.dataset.hasPromos === "true";
       promoBlock.classList.toggle("is-visible", hasPromos);
       if (hasPromos) renderPromos(row);
@@ -2356,9 +2491,7 @@
       editName.value = preset.name || "";
       editPrice.value = preset.price || "";
       editQty.value = preset.qty || "1";
-      editCategory.value = preset.category || "Nabiał";
-      editCategoryIcon.className = `field-category-icon ${getCategoryVisualClass(editCategory.value)}`.trim();
-      editCategoryIcon.innerHTML = getCategoryIconMarkup(editCategory.value, editName.value);
+      setCategoryValue(preset.category || "Nabiał", preset.name || "");
       promoBlock.classList.remove("is-visible");
       promoList.innerHTML = "";
       productSheet.classList.add("is-open");
@@ -2388,9 +2521,16 @@
       }
     }
 
+    function syncInlineClearVisibility() {
+      const hasText = inlineName.value.length > 0;
+      inlineAddClose.classList.toggle("is-hidden", hasText);
+      inlineAddSubmit.classList.toggle("is-hidden", !hasText);
+    }
+
     function openInlineAdd() {
       inlineAdd.classList.add("is-open");
       inlineName.focus();
+      syncInlineClearVisibility();
     }
 
     function closeInlineAdd() {
@@ -2398,6 +2538,7 @@
       inlineAddForm.reset();
       hideInlineSuggestion();
       inlineName.blur();
+      syncInlineClearVisibility();
     }
 
     function toggleInlineAdd() {
@@ -2541,6 +2682,7 @@
         inlineAddForm.reset();
         hideInlineSuggestion();
         inlineName.focus();
+        syncInlineClearVisibility();
       }
     }
 
@@ -2690,11 +2832,15 @@
     sheetClose.addEventListener("click", closeProductSheet);
     addProductRow.addEventListener("click", toggleInlineAdd);
     inlineAddClose.addEventListener("click", closeInlineAdd);
+    inlineAddSubmit.addEventListener("click", submitInlineProduct);
     inlineAddForm.addEventListener("submit", (event) => {
       event.preventDefault();
       submitInlineProduct();
     });
-    inlineName.addEventListener("input", renderInlineSuggestion);
+    inlineName.addEventListener("input", () => {
+      renderInlineSuggestion();
+      syncInlineClearVisibility();
+    });
     inlineSuggestion.addEventListener("click", () => {
       const name = inlineSuggestion.dataset.name;
       const category = inlineSuggestion.dataset.category;
@@ -2702,29 +2848,63 @@
         inlineName.value = "";
         hideInlineSuggestion();
         inlineName.focus();
+        syncInlineClearVisibility();
       }
     });
-    inlineAddForm.querySelectorAll("[data-quick-name]").forEach((button) => {
+    const quickPillsRow = document.querySelector(".quick-pills");
+    const quickPillPool = [
+      { name: "krem", category: "Nabiał" },
+      { name: "pomidor", category: "Warzywa" },
+      { name: "sok", category: "Napoje" },
+      { name: "woda", category: "Napoje" },
+    ];
+
+    function createQuickPill({ name, category }) {
+      const button = document.createElement("button");
+      button.className = "quick-pill";
+      button.type = "button";
+      button.dataset.quickName = name;
+      button.dataset.quickCategory = category;
+      button.textContent = `+ ${name}`;
+      bindQuickPill(button);
+      return button;
+    }
+
+    function bindQuickPill(button) {
       button.addEventListener("click", () => {
-        if (addInlineProduct({
+        if (!addInlineProduct({
           name: button.dataset.quickName,
           category: button.dataset.quickCategory,
-        })) {
-          inlineName.focus();
-        }
+        })) return;
+
+        inlineName.focus();
+        syncInlineClearVisibility();
+        button.remove();
+
+        const next = quickPillPool.shift();
+        if (next) quickPillsRow.appendChild(createQuickPill(next));
       });
-    });
+    }
+
+    inlineAddForm.querySelectorAll("[data-quick-name]").forEach(bindQuickPill);
     saveProduct.addEventListener("click", saveActiveProduct);
     deleteProduct.addEventListener("click", deleteActiveProduct);
 
-    editCategory.addEventListener("change", () => {
-      const category = editCategory.value;
-      editCategoryIcon.className = `field-category-icon ${getCategoryVisualClass(category)}`.trim();
-      editCategoryIcon.innerHTML = getCategoryIconMarkup(category, editName.value);
+    renderCategoryOptions();
+    categoryTrigger.addEventListener("click", toggleCategoryPicker);
+    document.addEventListener("click", (event) => {
+      if (!categoryPicker.classList.contains("is-open")) return;
+      if (categoryPicker.contains(event.target)) return;
+      closeCategoryPicker();
+    }, true);
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && categoryPicker.classList.contains("is-open")) {
+        closeCategoryPicker();
+      }
     });
 
     editName.addEventListener("input", () => {
-      editCategoryIcon.innerHTML = getCategoryIconMarkup(editCategory.value, editName.value);
+      syncCategoryIcons(editCategory.value);
     });
 
     popularGrid.addEventListener("click", (event) => {
@@ -2792,7 +2972,7 @@
       if (!inlineAdd.classList.contains("is-open")) return;
       if (inlineAdd.contains(event.target)) return;
       closeInlineAdd();
-    });
+    }, true);
 
     updateBoughtCount();
   </script>
