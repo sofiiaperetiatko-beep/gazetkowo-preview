@@ -225,6 +225,13 @@
       background: var(--mock-yellow);
     }
 
+    .app-header {
+      position: sticky;
+      top: env(safe-area-inset-top);
+      z-index: 10;
+      background: var(--mock-bg);
+    }
+
     .card {
       background: var(--surface);
       border-radius: 16px;
@@ -732,7 +739,8 @@
     }
 
     .price {
-      min-width: 0;
+      width: 46px;
+      grid-column: -1;
       justify-self: end;
       text-align: right;
       color: var(--mock-ink);
@@ -740,6 +748,10 @@
       line-height: 0.9;
       font-weight: 700;
       letter-spacing: -0.035em;
+    }
+
+    .qty-pill + .price {
+      margin-left: -4px;
     }
 
     .price sup {
@@ -930,10 +942,26 @@
       font-size: 12px;
       line-height: 1;
       font-weight: 400;
-      pointer-events: none;
+      cursor: pointer;
     }
 
-    .delete:disabled { color: var(--mock-bought); cursor: default; }
+    .delete:disabled { color: var(--mock-bought); cursor: default; pointer-events: none; }
+
+    .section-toggle {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+    }
+
+    .section-toggle-icon {
+      color: var(--mock-ink);
+      transition: transform var(--motion-base) var(--ease-standard);
+    }
+
+    .section-toggle.is-collapsed .section-toggle-icon {
+      transform: rotate(180deg);
+    }
 
     .bought {
       border-radius: 20px;
@@ -1079,7 +1107,15 @@
       box-shadow: rgba(0, 0, 0, 0.16) 0 -12px 34px;
       transform: translateY(105%);
       transition: transform 260ms var(--ease-standard);
-      overflow: auto;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .sheet-body {
+      flex: 1;
+      min-height: 0;
+      overflow-y: auto;
     }
 
     .sheet-backdrop.is-open .product-sheet {
@@ -1261,7 +1297,7 @@
       background: var(--mock-bg);
       color: var(--mock-ink);
       font-family: var(--font-body);
-      font-size: 14px;
+      font-size: 16px;
       font-weight: 700;
       outline: none;
     }
@@ -1480,6 +1516,7 @@
     }
 
     .sheet-actions {
+      flex-shrink: 0;
       display: grid;
       grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
       gap: 10px;
@@ -1555,24 +1592,26 @@
 </head>
 <body>
   <div class="app">
-    <div class="statusbar" aria-hidden="true">
-      <span class="wifi"></span>
-      <span class="signal"></span>
-      <span class="battery"></span>
-      <span>12:30</span>
+    <div class="app-header">
+      <div class="statusbar" aria-hidden="true">
+        <span class="wifi"></span>
+        <span class="signal"></span>
+        <span class="battery"></span>
+        <span>12:30</span>
+      </div>
+
+      <header class="topbar">
+        <button class="icon-btn" aria-label="Menu">
+          <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.7"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+        </button>
+        <div class="title"><span>Lista zakupów Impreza</span><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.8"><path d="m6 9 6 6 6-6"/></svg></div>
+        <button class="icon-btn" aria-label="Więcej">
+          <svg viewBox="0 0 24 24" width="25" height="25" fill="currentColor"><circle cx="12" cy="5" r="2.3"/><circle cx="12" cy="12" r="2.3"/><circle cx="12" cy="19" r="2.3"/></svg>
+        </button>
+      </header>
+
+      <div class="accent-bar"></div>
     </div>
-
-    <header class="topbar">
-      <button class="icon-btn" aria-label="Menu">
-        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.7"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
-      </button>
-      <div class="title"><span>Lista zakupów Impreza</span><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.8"><path d="m6 9 6 6 6-6"/></svg></div>
-      <button class="icon-btn" aria-label="Więcej">
-        <svg viewBox="0 0 24 24" width="25" height="25" fill="currentColor"><circle cx="12" cy="5" r="2.3"/><circle cx="12" cy="12" r="2.3"/><circle cx="12" cy="19" r="2.3"/></svg>
-      </button>
-    </header>
-
-    <div class="accent-bar"></div>
 
     <main>
       <section class="card manual" data-od-id="manual-products" aria-label="Produkty dodane ręcznie">
@@ -1613,7 +1652,7 @@
         <article class="row no-price" data-name="chipsy" data-price="6,49" data-qty="1" data-category="Przekąski">
           <button class="check" aria-label="Oznacz chipsy jako kupione"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke-width="3"><path d="m5 12 4 4 10-10"/></svg></button>
           <div class="category-icon snack"><span class="chips-icon"></span></div>
-          <div class="item-main"><div class="name"><strong>chipsy</strong><span class="offer-pill">2 oferty</span></div></div>
+          <div class="item-main"><div class="name"><strong>chipsy</strong></div></div>
           <div class="price">6<sup>49</sup></div>
         </article>
       </section>
@@ -1656,8 +1695,11 @@
       </section>
 
       <div class="section-head">
-        <h2 id="boughtTitle">Kupione (1)</h2>
-        <button class="delete" id="deleteBought">Usuń kupione</button>
+        <button class="section-toggle" id="toggleBought" type="button" aria-expanded="true" aria-controls="boughtList">
+          <h2 id="boughtTitle">Kupione (1)</h2>
+          <svg class="section-toggle-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.7"><path d="m6 9 6 6 6-6"/></svg>
+        </button>
+        <button class="delete" id="deleteBought" type="button">Usuń kupione</button>
       </div>
 
       <section class="card bought" id="boughtList" data-od-id="bought-products" aria-labelledby="boughtTitle">
@@ -1689,52 +1731,54 @@
         </button>
       </div>
 
-      <div class="popular-block" id="popularBlock">
-        <p class="popular-intro">Wybierz popularny produkt, a formularz uzupełni nazwę i kategorię.</p>
-        <div class="popular-grid" id="popularGrid"></div>
-      </div>
-
-      <div class="edit-grid">
-        <div class="edit-field">
-          <label for="editName">Nazwa</label>
-          <div class="name-input-wrap">
-            <input id="editName" type="text" value="">
-            <span class="field-category-icon" id="editCategoryIcon" aria-hidden="true">
-              <span class="cheese-icon"></span>
-            </span>
-          </div>
+      <div class="sheet-body">
+        <div class="popular-block" id="popularBlock">
+          <p class="popular-intro">Wybierz popularny produkt, a formularz uzupełni nazwę i kategorię.</p>
+          <div class="popular-grid" id="popularGrid"></div>
         </div>
-        <div class="edit-field-row">
+
+        <div class="edit-grid">
           <div class="edit-field">
-            <label for="editPrice">Cena</label>
-            <input id="editPrice" type="text" inputmode="decimal" value="">
-          </div>
-          <div class="edit-field">
-            <label for="editQty">Ilość</label>
-            <div class="stepper" data-stepper="qty">
-              <button class="stepper-btn" type="button" data-step-action="decrease" aria-label="Zmniejsz ilość">−</button>
-              <input id="editQty" type="number" min="1" value="">
-              <button class="stepper-btn" type="button" data-step-action="increase" aria-label="Zwiększ ilość">+</button>
+            <label for="editName">Nazwa</label>
+            <div class="name-input-wrap">
+              <input id="editName" type="text" value="">
+              <span class="field-category-icon" id="editCategoryIcon" aria-hidden="true">
+                <span class="cheese-icon"></span>
+              </span>
             </div>
           </div>
+          <div class="edit-field-row">
+            <div class="edit-field">
+              <label for="editPrice">Cena</label>
+              <input id="editPrice" type="text" inputmode="decimal" value="">
+            </div>
+            <div class="edit-field">
+              <label for="editQty">Ilość</label>
+              <div class="stepper" data-stepper="qty">
+                <button class="stepper-btn" type="button" data-step-action="decrease" aria-label="Zmniejsz ilość">−</button>
+                <input id="editQty" type="number" min="1" value="">
+                <button class="stepper-btn" type="button" data-step-action="increase" aria-label="Zwiększ ilość">+</button>
+              </div>
+            </div>
+          </div>
+          <div class="edit-field">
+            <label for="editCategory">Kategoria</label>
+            <select id="editCategory">
+              <option>Nabiał</option>
+              <option>Przekąski</option>
+              <option>Kawa</option>
+              <option>Napoje</option>
+              <option>Owoce</option>
+              <option>Warzywa</option>
+              <option>Oleje</option>
+            </select>
+          </div>
         </div>
-        <div class="edit-field">
-          <label for="editCategory">Kategoria</label>
-          <select id="editCategory">
-            <option>Nabiał</option>
-            <option>Przekąski</option>
-            <option>Kawa</option>
-            <option>Napoje</option>
-            <option>Owoce</option>
-            <option>Warzywa</option>
-            <option>Oleje</option>
-          </select>
-        </div>
-      </div>
 
-      <div class="promo-block" id="promoBlock">
-        <h4 class="promo-title">Promocje z gazetek</h4>
-        <div class="promo-list" id="promoList"></div>
+        <div class="promo-block" id="promoBlock">
+          <h4 class="promo-title">Promocje z gazetek</h4>
+          <div class="promo-list" id="promoList"></div>
+        </div>
       </div>
 
       <div class="sheet-actions">
@@ -1748,6 +1792,8 @@
     const boughtList = document.querySelector("#boughtList");
     const boughtTitle = document.querySelector("#boughtTitle");
     const emptyBought = document.querySelector("#emptyBought");
+    const toggleBought = document.querySelector("#toggleBought");
+    const deleteBought = document.querySelector("#deleteBought");
     const productSheet = document.querySelector("#productSheet");
     const sheetClose = document.querySelector("#sheetClose");
     const editName = document.querySelector("#editName");
@@ -2468,7 +2514,8 @@
 
     function saveActiveProduct() {
       const name = editName.value.trim() || "Produkt";
-      const price = editPrice.value.trim() || activeRow?.dataset.price || "0,00";
+      const enteredPrice = editPrice.value.trim();
+      const price = enteredPrice || activeRow?.dataset.price || "0,00";
       const qty = Math.max(1, Number.parseInt(editQty.value || "1", 10) || 1);
       const category = editCategory.value;
 
@@ -2494,6 +2541,7 @@
 
       const priceNode = activeRow.querySelector(".price");
       if (priceNode) priceNode.innerHTML = formatPriceHtml(price);
+      if (enteredPrice) activeRow.classList.remove("no-price");
 
       syncRowQtyPill(activeRow, qty);
 
@@ -2549,6 +2597,34 @@
       const boughtRow = event.target.closest(".row");
       if (!boughtRow || boughtRow.classList.contains("is-removing")) return;
       restoreSourceRow(boughtRow);
+    });
+
+    toggleBought.addEventListener("click", () => {
+      const isCollapsed = toggleBought.classList.contains("is-collapsed");
+
+      if (isCollapsed) {
+        toggleBought.classList.remove("is-collapsed");
+        toggleBought.setAttribute("aria-expanded", "true");
+        expandSection(boughtList);
+      } else {
+        toggleBought.classList.add("is-collapsed");
+        toggleBought.setAttribute("aria-expanded", "false");
+        collapseSection(boughtList, () => { boughtList.style.display = "none"; });
+      }
+    });
+
+    deleteBought.addEventListener("click", () => {
+      const rows = getBoughtRows();
+      if (!rows.length) return;
+
+      let remaining = rows.length;
+      rows.forEach((row) => {
+        collapseRow(row, () => {
+          row.remove();
+          remaining -= 1;
+          if (remaining === 0) updateBoughtCount();
+        });
+      });
     });
 
     sheetClose.addEventListener("click", closeProductSheet);
