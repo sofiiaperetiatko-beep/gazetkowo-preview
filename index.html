@@ -1345,6 +1345,14 @@
       font-weight: 700;
     }
 
+    .edit-field.has-error label {
+      color: var(--mock-red);
+    }
+
+    .edit-field.has-error input {
+      border-color: var(--mock-red);
+    }
+
     .edit-field input {
       width: 100%;
       height: 42px;
@@ -1513,6 +1521,11 @@
     .edit-field input:focus {
       border-color: var(--mock-yellow);
       box-shadow: 0 0 0 2px rgba(247, 202, 52, 0.28);
+    }
+
+    .edit-field.has-error input:focus {
+      border-color: var(--mock-red);
+      box-shadow: 0 0 0 2px rgba(255, 49, 56, 0.24);
     }
 
     .promo-block {
@@ -1894,9 +1907,9 @@
         </div>
 
         <div class="edit-grid">
-          <div class="edit-field">
-            <label for="editName">Nazwa</label>
-            <input id="editName" type="text" value="">
+          <div class="edit-field" id="editNameField">
+            <label for="editName" id="editNameLabel">Nazwa</label>
+            <input id="editName" type="text" value="" placeholder="Nazwa produktu">
           </div>
           <div class="edit-field-row">
             <div class="edit-field">
@@ -1955,6 +1968,8 @@
     const productSheet = document.querySelector("#productSheet");
     const sheetClose = document.querySelector("#sheetClose");
     const editName = document.querySelector("#editName");
+    const editNameField = document.querySelector("#editNameField");
+    const editNameLabel = document.querySelector("#editNameLabel");
     const editPrice = document.querySelector("#editPrice");
     const editQty = document.querySelector("#editQty");
     const editCategory = document.querySelector("#editCategory");
@@ -2529,9 +2544,20 @@
       return `${whole || "0"}<sup>${cents}</sup>`;
     }
 
+    function clearNameError() {
+      editNameField.classList.remove("has-error");
+      editNameLabel.textContent = "Nazwa";
+    }
+
+    function showNameError() {
+      editNameField.classList.add("has-error");
+      editNameLabel.textContent = "To pole jest wymagane";
+    }
+
     function openProductSheet(row) {
       sheetMode = "edit";
       activeRow = row;
+      clearNameError();
       const name = row.dataset.name || row.querySelector(".name strong")?.textContent || "";
       const price = row.dataset.price || "";
       const qty = row.dataset.qty || "1";
@@ -2566,6 +2592,7 @@
     function openAddProductSheet(preset = {}) {
       sheetMode = "add";
       activeRow = null;
+      clearNameError();
       sheetTitle.textContent = "Dodaj produkt";
       saveProduct.textContent = "Dodaj do listy";
       productSheet.classList.add("is-add-mode");
@@ -2778,7 +2805,13 @@
     }
 
     function saveActiveProduct() {
-      const name = editName.value.trim() || "Produkt";
+      const name = editName.value.trim();
+      if (!name) {
+        showNameError();
+        editName.focus();
+        return;
+      }
+
       const enteredPrice = editPrice.value.trim();
       const price = enteredPrice || activeRow?.dataset.price || "0,00";
       const qty = Math.max(1, Number.parseInt(editQty.value || "1", 10) || 1);
@@ -2992,6 +3025,11 @@
 
     editName.addEventListener("input", () => {
       syncCategoryIcons(editCategory.value);
+      if (editName.value.trim()) {
+        clearNameError();
+      } else {
+        showNameError();
+      }
     });
 
     popularGrid.addEventListener("click", (event) => {
