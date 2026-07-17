@@ -2283,14 +2283,24 @@
 
     function addPromoToShoppingList(promoItem) {
       const storeSection = getRetailerSection(promoItem.dataset.store);
-      if (!storeSection) return false;
+      if (!storeSection) return null;
 
       const row = createPromoListRow(promoItem);
       storeSection.appendChild(row);
       bindActiveRow(row);
       window.setTimeout(() => row.classList.remove("is-adding"), 280);
       updateRetailerSectionVisibility(storeSection);
-      return true;
+      return row;
+    }
+
+    function removePromoFromShoppingList(row) {
+      if (!row || !row.isConnected) return;
+      const storeSection = row.closest(".retailer");
+
+      collapseRow(row, () => {
+        row.remove();
+        updateRetailerSectionVisibility(storeSection);
+      });
     }
 
     function formatPriceHtml(value) {
@@ -2736,11 +2746,24 @@
       const button = event.target.closest(".promo-add");
       if (!button) return;
       event.stopPropagation();
-      if (button.classList.contains("is-added")) return;
 
       const promoItem = button.closest(".promo-item");
-      if (!promoItem || !addPromoToShoppingList(promoItem)) return;
+      if (!promoItem) return;
 
+      if (button.classList.contains("is-added")) {
+        removePromoFromShoppingList(promoItem._addedRow);
+        promoItem._addedRow = null;
+        promoItem.classList.remove("is-added");
+        button.classList.remove("is-added");
+        button.textContent = "Dodaj";
+        button.setAttribute("aria-label", "Dodaj promocję do listy");
+        return;
+      }
+
+      const row = addPromoToShoppingList(promoItem);
+      if (!row) return;
+
+      promoItem._addedRow = row;
       promoItem.classList.add("is-added");
       button.classList.add("is-added");
       button.textContent = "✓ Dodano";
