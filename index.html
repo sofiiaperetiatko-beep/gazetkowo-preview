@@ -2014,9 +2014,17 @@
         { store: "Biedronka", name: "Mleko 2% 1 l", price: "3,49", qty: "1", date: "01.02-15.02", thumb: "milk-a" },
         { store: "Lidl", name: "Mleko 2% 1 l", price: "3,59", qty: "1", date: "01.02-15.02", thumb: "milk-b" },
         { store: "Kaufland", name: "Mleko 2% 1 l", price: "3,39", qty: "1", date: "01.02-15.02", thumb: "milk-c" },
-        { store: "Auchan", name: "Mleko 2% 1 l", price: "3,69", qty: "1", date: "01.02-15.02", thumb: "milk-d" }
+        { store: "Auchan", name: "Mleko 2% 1 l", price: "3,69", qty: "1", date: "01.02-15.02", thumb: "milk-d" },
+        { store: "Netto", name: "Mleko 2% 1 l", price: "3,45", qty: "1", date: "01.02-15.02", thumb: "milk-a" },
+        { store: "Carrefour", name: "Mleko 2% 1 l", price: "3,79", qty: "1", date: "01.02-15.02", thumb: "milk-b" },
+        { store: "Aldi", name: "Mleko 2% 1 l", price: "3,29", qty: "1", date: "01.02-15.02", thumb: "milk-c" },
+        { store: "Dino", name: "Mleko 2% 1 l", price: "3,55", qty: "1", date: "01.02-15.02", thumb: "milk-d" },
+        { store: "Stokrotka", name: "Mleko 2% 1 l", price: "3,65", qty: "1", date: "01.02-15.02", thumb: "milk-a" }
       ]
     };
+
+    const PROMO_PAGE_SIZE = 4;
+    let promoVisibleCount = PROMO_PAGE_SIZE;
 
     const inlineSuggestions = [
       { match: ["jogurt", "jogurt naturalny"], name: "Jogurt naturalny", category: "Nabiał" },
@@ -2462,18 +2470,25 @@
 
     function renderPromos(row) {
       const promoKey = row.dataset.promoKey || "";
+      promoList.dataset.promoKey = promoKey;
+      promoVisibleCount = PROMO_PAGE_SIZE;
+      renderVisiblePromos();
+    }
+
+    function renderVisiblePromos() {
+      const promoKey = promoList.dataset.promoKey || "";
       const promos = promoSets[promoKey] || [];
       promoList.innerHTML = "";
 
-      promos.slice(0, 4).forEach((promo) => {
+      promos.slice(0, promoVisibleCount).forEach((promo) => {
         promoList.appendChild(createPromoItem(promo));
       });
 
-      if (promoKey === "milk") {
+      if (promos.length > promoVisibleCount) {
         const more = document.createElement("button");
         more.className = "promo-more";
         more.type = "button";
-        more.textContent = "Zobacz wszystkie oferty";
+        more.textContent = "Zobacz więcej";
         promoList.appendChild(more);
       }
     }
@@ -3053,6 +3068,13 @@
     });
 
     promoList.addEventListener("click", (event) => {
+      const moreButton = event.target.closest(".promo-more");
+      if (moreButton) {
+        promoVisibleCount += PROMO_PAGE_SIZE;
+        renderVisiblePromos();
+        return;
+      }
+
       const button = event.target.closest(".promo-add");
       if (!button) return;
       event.stopPropagation();
