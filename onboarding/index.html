@@ -30,7 +30,7 @@
       color: var(--text);
       display: flex;
       justify-content: center;
-      align-items: center;
+      align-items: flex-end;
       height: 100vh;
       height: 100dvh;
       padding: 0;
@@ -41,7 +41,7 @@
       flex-shrink: 0;
       background: var(--bg);
       overflow: hidden;
-      transform-origin: center center;
+      transform-origin: center bottom;
     }
 
     .status-bar {
@@ -621,9 +621,7 @@
     function fitPageToViewport() {
       pageEl.style.transform = "scale(1)";
       const rect = pageEl.getBoundingClientRect();
-      const availW = window.innerWidth;
-      const availH = window.innerHeight;
-      const scale = Math.min(availW / rect.width, availH / rect.height);
+      const scale = window.innerWidth / rect.width;
       pageEl.style.transform = `scale(${scale})`;
     }
 
