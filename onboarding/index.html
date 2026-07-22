@@ -24,23 +24,26 @@
     }
 
     * { box-sizing: border-box; }
-    html, body { margin: 0; min-height: 100%; }
+    html, body { margin: 0; height: 100%; overflow: hidden; }
     body {
       background: linear-gradient(180deg, #E8F1FC 0%, #f7f9ff 100%);
       color: var(--text);
       display: flex;
       justify-content: center;
       align-items: center;
-      padding: 24px;
+      height: 100vh;
+      height: 100dvh;
+      padding: 16px;
     }
 
     .page {
-      width: min(100%, 420px);
-      max-width: 420px;
+      width: 420px;
+      flex-shrink: 0;
       background: var(--bg);
       border-radius: 42px 42px 0 0;
       box-shadow: 0 30px 80px rgba(12, 35, 80, 0.12);
       overflow: hidden;
+      transform-origin: center center;
     }
 
     .status-bar {
@@ -614,6 +617,21 @@
       selectedRetailerCount += isActive ? 1 : -1;
       updateNextButtonState();
     });
+
+    const pageEl = document.querySelector(".page");
+
+    function fitPageToViewport() {
+      pageEl.style.transform = "scale(1)";
+      const rect = pageEl.getBoundingClientRect();
+      const availW = window.innerWidth - 32;
+      const availH = window.innerHeight - 32;
+      const scale = Math.min(availW / rect.width, availH / rect.height);
+      pageEl.style.transform = `scale(${scale})`;
+    }
+
+    fitPageToViewport();
+    window.addEventListener("resize", fitPageToViewport);
+    window.addEventListener("orientationchange", fitPageToViewport);
 
     let currentScreen = 0;
     const headlineEl = document.getElementById("headline");
