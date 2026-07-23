@@ -39,26 +39,25 @@
     .page {
       width: 420px;
       flex-shrink: 0;
-      background: var(--bg);
       overflow: hidden;
       transform-origin: center bottom;
     }
 
     .screen {
       position: relative;
-      background: #E8F1FC;
       height: 692px;
       overflow: hidden;
     }
 
     .map-bg {
-      position: absolute;
+      position: fixed;
       inset: 0;
       z-index: 0;
+      background-color: var(--bg);
       background-image: url(/img/onboarding/map.jpg);
       background-size: cover;
       background-position: center;
-      mix-blend-mode: screen;
+      background-blend-mode: screen;
       opacity: 0;
       pointer-events: none;
       transition: opacity 600ms ease;
@@ -185,7 +184,6 @@
       place-items: center;
       padding: 32px 24px 276px;
       text-align: center;
-      background: var(--bg);
     }
 
     .hero-card {
@@ -858,6 +856,7 @@
   </style>
 </head>
 <body>
+  <div class="map-bg" id="mapBg"></div>
   <button class="skip-button" id="skipButton" type="button" aria-label="Pomiń">
     <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
       <path d="M4.5 4.5l11 11M15.5 4.5l-11 11" stroke="#20232C" stroke-width="2.2" stroke-linecap="round"/>
@@ -866,7 +865,6 @@
   <main class="page">
     <section class="screen" id="screen">
       <div class="hero-panel">
-        <div class="map-bg" id="mapBg"></div>
         <div class="pin-marker" id="pinMarker">
           <div class="pin-wobble">
             <img class="pin-shape" src="/img/onboarding/map-pin.svg" alt="" />
