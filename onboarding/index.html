@@ -175,6 +175,68 @@
       }
     }
 
+    .sale-badges {
+      display: none;
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .sale-badges.is-visible {
+      display: block;
+    }
+
+    .sale-badge {
+      position: absolute;
+      opacity: 0;
+      transform: scale(0.2) rotate(-10deg);
+      animation:
+        sale-pop-in 400ms cubic-bezier(0.34, 1.56, 0.64, 1) both,
+        sale-pulse 2.2s ease-in-out infinite;
+    }
+
+    .sale-badge-1 {
+      top: 340px;
+      left: 20px;
+      width: 55px;
+      animation-delay: 1700ms, 2100ms;
+    }
+
+    .sale-badge-2 {
+      top: 340px;
+      right: 20px;
+      width: 55px;
+      animation-delay: 1820ms, 2220ms;
+    }
+
+    .sale-badge-3 {
+      top: 150px;
+      right: 8px;
+      width: 55px;
+      animation-delay: 1940ms, 2340ms;
+    }
+
+    @keyframes sale-pop-in {
+      from {
+        opacity: 0;
+        transform: scale(0.2) rotate(-10deg);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1) rotate(0deg);
+      }
+    }
+
+    @keyframes sale-pulse {
+      0%, 100% {
+        transform: scale(1) rotate(0deg);
+      }
+      50% {
+        transform: scale(1.08) rotate(0deg);
+      }
+    }
+
     .hero-panel {
       position: absolute;
       inset: 0;
@@ -876,6 +938,11 @@
           <img class="scatter-badge scatter-badge-2" src="/img/onboarding/badge-aldi.png" alt="Aldi" />
           <img class="scatter-badge scatter-badge-3" src="/img/onboarding/badge-dino.png" alt="Dino" />
         </div>
+        <div class="sale-badges" id="saleBadges">
+          <img class="sale-badge sale-badge-1" src="/img/onboarding/sale-1.svg" alt="" />
+          <img class="sale-badge sale-badge-2" src="/img/onboarding/sale-2.svg" alt="" />
+          <img class="sale-badge sale-badge-3" src="/img/onboarding/sale-3.svg" alt="" />
+        </div>
         <div class="hero-card" id="heroCard">
           <div class="speech">Hej tu Spryciak! Witaj w Gazetkowie</div>
           <div class="fox-wrapper">
@@ -1199,6 +1266,7 @@
     const mapBg = document.getElementById("mapBg");
     const pinMarker = document.getElementById("pinMarker");
     const scatterBadges = document.getElementById("scatterBadges");
+    const saleBadges = document.getElementById("saleBadges");
 
     function updateNextButtonState() {
       const needsRetailer = currentScreen === 2 && selectedRetailerCount === 0;
@@ -1226,6 +1294,7 @@
         mapBg.classList.toggle("is-visible", currentScreen === 1);
         pinMarker.classList.toggle("is-visible", currentScreen === 1);
         scatterBadges.classList.toggle("is-visible", currentScreen === 1);
+        saleBadges.classList.toggle("is-visible", currentScreen === 1);
         shadowSvg.classList.toggle("is-small", currentScreen === 1);
         shadowSvg.classList.toggle("is-gone", currentScreen === 2);
         speech2.classList.toggle("is-hidden", currentScreen !== 1);
