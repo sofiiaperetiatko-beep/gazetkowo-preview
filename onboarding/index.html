@@ -166,8 +166,7 @@
     }
 
     #speech2 {
-      top: 32px;
-      transform: translateX(calc(-50% + 80px));
+      top: 78px;
     }
 
     .coin {
@@ -681,13 +680,12 @@
     });
 
     const pageEl = document.querySelector(".page");
-    let pageScale = 1;
 
     function fitPageToViewport() {
       pageEl.style.transform = "scale(1)";
       const rect = pageEl.getBoundingClientRect();
-      pageScale = window.innerWidth / rect.width;
-      pageEl.style.transform = `scale(${pageScale})`;
+      const scale = window.innerWidth / rect.width;
+      pageEl.style.transform = `scale(${scale})`;
     }
 
     fitPageToViewport();
@@ -701,18 +699,8 @@
       skipButtonEl.style.top = `${statusBarEl.getBoundingClientRect().height + 24}px`;
     }
 
-    function positionSpeech2() {
-      const speech2El = document.getElementById("speech2");
-      const skipRect = skipButtonEl.getBoundingClientRect();
-      const pageRect = pageEl.getBoundingClientRect();
-      const minGapTop = (skipRect.bottom + 24 - pageRect.top) / pageScale;
-      const designTop = Math.max(32, minGapTop);
-      speech2El.style.top = `${designTop}px`;
-    }
-
     function positionOverlays() {
       positionSkipButton();
-      positionSpeech2();
     }
 
     positionOverlays();
