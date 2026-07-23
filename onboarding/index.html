@@ -194,6 +194,34 @@
       display: grid;
       place-items: center;
       z-index: 4;
+      opacity: 0;
+      animation:
+        coin-fade-in 320ms ease 420ms both,
+        coin-float 3.2s ease-in-out 740ms infinite;
+    }
+
+    .coin-bottom {
+      animation:
+        coin-fade-in 320ms ease 560ms both,
+        coin-float 3.6s ease-in-out 880ms infinite;
+    }
+
+    @keyframes coin-fade-in {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+
+    @keyframes coin-float {
+      0%, 100% {
+        transform: translate(0, 0) rotate(0deg);
+      }
+      50% {
+        transform: translate(4px, -8px) rotate(6deg);
+      }
     }
 
     .coin::before {
