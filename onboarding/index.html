@@ -201,6 +201,29 @@
       opacity: 0;
     }
 
+    .skip-button {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      z-index: 5;
+      width: 44px;
+      height: 44px;
+      border: none;
+      border-radius: 16px;
+      background: #ffffff;
+      box-shadow: 0 10px 24px rgba(16, 24, 40, 0.14);
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      touch-action: manipulation;
+      opacity: 1;
+      transition: opacity 200ms ease;
+    }
+
+    .skip-button.is-hidden {
+      display: none;
+    }
+
     @keyframes shadow-pop-in {
       from {
         transform: translateX(-50%) scale(0);
@@ -510,6 +533,11 @@
           <ellipse cx="106" cy="36" rx="106" ry="36" fill="#D7E9FF"/>
         </svg>
         <div class="retailer-grid" id="retailerGrid"></div>
+        <button class="skip-button" id="skipButton" type="button" aria-label="Pomiń">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <path d="M4.5 4.5l11 11M15.5 4.5l-11 11" stroke="#20232C" stroke-width="2.2" stroke-linecap="round"/>
+          </svg>
+        </button>
       </div>
       <div class="hero-footer">
         <h1 class="headline" id="headline">Gazetki, okazje i zniżki — wszystko w jednym miejscu.</h1>
@@ -643,6 +671,7 @@
     const heroCard = document.getElementById("heroCard");
     const screenEl = document.getElementById("screen");
     const shadowSvg = document.getElementById("shadowSvg");
+    const skipButton = document.getElementById("skipButton");
 
     function updateNextButtonState() {
       const needsRetailer = currentScreen === 2 && selectedRetailerCount === 0;
@@ -670,6 +699,7 @@
         screenEl.classList.toggle("has-map-bg", currentScreen === 1);
         shadowSvg.classList.toggle("is-small", currentScreen === 1);
         shadowSvg.classList.toggle("is-gone", currentScreen === 2);
+        skipButton.classList.toggle("is-hidden", currentScreen === 2);
         headlineEl.classList.remove("is-fading");
         descriptionEl.classList.remove("is-fading");
         retailerGrid.classList.remove("is-fading");
@@ -681,6 +711,10 @@
 
     nextButton.addEventListener("click", () => {
       goToScreen(currentScreen + 1);
+    });
+
+    skipButton.addEventListener("click", () => {
+      goToScreen(onboardingScreens.length - 1);
     });
 
     dots.forEach((dot) => {
