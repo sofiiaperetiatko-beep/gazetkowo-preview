@@ -332,14 +332,27 @@
 
     .promo {
       position: absolute;
-      right: 0;
-      bottom: 18px;
+      right: 18px;
+      bottom: 28px;
       width: 78.4px;
       max-width: 25.2%;
       aspect-ratio: 102.59 / 133.21;
       height: auto;
-      transform: translateX(12%);
+      transform-origin: bottom left;
+      opacity: 0;
+      animation: promo-pop-in 380ms cubic-bezier(0.34, 1.56, 0.64, 1) 520ms both;
       z-index: 3;
+    }
+
+    @keyframes promo-pop-in {
+      from {
+        opacity: 0;
+        transform: translateX(0) rotate(-24deg) scale(0.4);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0) rotate(-6deg) scale(1);
+      }
     }
 
     .hero-footer {
