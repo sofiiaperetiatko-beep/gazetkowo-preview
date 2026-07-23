@@ -111,7 +111,7 @@
       max-width: 320px;
       width: 100%;
       margin-top: 22px;
-      transition: opacity 280ms ease;
+      transition: opacity 220ms ease;
     }
 
     .hero-card.is-fading {
@@ -140,7 +140,22 @@
       color: #101828;
       text-align: left;
       opacity: 1;
-      transition: opacity 280ms ease;
+      transition: opacity 220ms ease;
+    }
+
+    .hero-card .speech {
+      animation: speech-pop-in 240ms ease-out 320ms both;
+    }
+
+    @keyframes speech-pop-in {
+      from {
+        opacity: 0;
+        transform: translateX(calc(-50% + 30px)) translateY(8px) scale(0.92);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(calc(-50% + 30px)) translateY(0) scale(1);
+      }
     }
 
     .speech::after {
@@ -217,7 +232,7 @@
       transform-origin: center;
       transform: translateX(-50%) scale(1);
       transition: transform 420ms cubic-bezier(0.34, 1.56, 0.64, 1), opacity 300ms ease;
-      animation: shadow-pop-in 480ms cubic-bezier(0.34, 1.56, 0.64, 1);
+      animation: shadow-pop-in 360ms cubic-bezier(0.34, 1.56, 0.64, 1);
     }
 
     .shadow.is-small {
@@ -270,7 +285,7 @@
       position: relative;
       z-index: 2;
       transform-origin: bottom center;
-      animation: fox-pop-in 650ms cubic-bezier(0.34, 1.56, 0.64, 1);
+      animation: fox-pop-in 450ms cubic-bezier(0.34, 1.56, 0.64, 1);
     }
 
     @keyframes fox-pop-in {
@@ -325,7 +340,7 @@
       justify-content: center;
       opacity: 1;
       transform: translateY(0);
-      transition: opacity 280ms ease, transform 280ms ease;
+      transition: opacity 220ms ease, transform 220ms ease;
     }
 
     .hero-footer .description {
@@ -342,7 +357,7 @@
       justify-content: center;
       opacity: 1;
       transform: translateY(0);
-      transition: opacity 280ms ease, transform 280ms ease;
+      transition: opacity 220ms ease, transform 220ms ease;
     }
 
     .hero-footer .headline.is-fading,
@@ -371,7 +386,7 @@
       padding: 2px 2px 300px;
       opacity: 1;
       transform: translateY(0);
-      transition: opacity 280ms ease, transform 280ms ease;
+      transition: opacity 220ms ease, transform 220ms ease;
     }
 
     .retailer-grid.is-visible {
@@ -980,7 +995,7 @@
         descriptionEl.classList.remove("is-fading");
         retailerGrid.classList.remove("is-fading");
         heroCard.classList.remove("is-fading");
-      }, 240);
+      }, 200);
 
       dots.forEach((dot, dotIndex) => dot.classList.toggle("active", dotIndex === currentScreen));
     }
