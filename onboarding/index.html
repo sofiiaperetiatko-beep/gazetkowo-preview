@@ -144,7 +144,7 @@
     }
 
     .hero-card .speech {
-      animation: speech-pop-in 240ms ease-out 320ms both;
+      animation: speech-pop-in 240ms ease-out 620ms both;
     }
 
     @keyframes speech-pop-in {
@@ -196,14 +196,14 @@
       z-index: 4;
       opacity: 0;
       animation:
-        coin-fade-in 320ms ease 420ms both,
-        coin-float 3.2s ease-in-out 740ms infinite;
+        coin-fade-in 320ms ease 640ms both,
+        coin-float 3.2s ease-in-out 960ms infinite;
     }
 
     .coin-bottom {
       animation:
-        coin-fade-in 320ms ease 560ms both,
-        coin-float 3.6s ease-in-out 880ms infinite;
+        coin-fade-in 320ms ease 780ms both,
+        coin-float 3.6s ease-in-out 1100ms infinite;
     }
 
     @keyframes coin-fade-in {
@@ -260,7 +260,7 @@
       transform-origin: center;
       transform: translateX(-50%) scale(1);
       transition: transform 420ms cubic-bezier(0.34, 1.56, 0.64, 1), opacity 300ms ease;
-      animation: shadow-pop-in 360ms cubic-bezier(0.34, 1.56, 0.64, 1);
+      animation: shadow-pop-in 300ms cubic-bezier(0.34, 1.56, 0.64, 1);
     }
 
     .shadow.is-small {
@@ -313,7 +313,8 @@
       position: relative;
       z-index: 2;
       transform-origin: bottom center;
-      animation: fox-pop-in 450ms cubic-bezier(0.34, 1.56, 0.64, 1);
+      opacity: 0;
+      animation: fox-pop-in 420ms cubic-bezier(0.34, 1.56, 0.64, 1) 220ms both;
     }
 
     @keyframes fox-pop-in {
@@ -340,7 +341,7 @@
       height: auto;
       transform-origin: bottom left;
       opacity: 0;
-      animation: promo-pop-in 380ms cubic-bezier(0.34, 1.56, 0.64, 1) 520ms both;
+      animation: promo-pop-in 380ms cubic-bezier(0.34, 1.56, 0.64, 1) 700ms both;
       z-index: 3;
     }
 
