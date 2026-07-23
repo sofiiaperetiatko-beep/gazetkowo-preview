@@ -928,6 +928,97 @@
     .permission-button[data-permission-choice="deny"] {
       color: #101828;
     }
+
+    .postal-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 50;
+      background: rgba(60, 60, 67, 0.32);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      opacity: 0;
+      transition: opacity 220ms ease;
+    }
+
+    .postal-modal.is-open {
+      display: flex;
+    }
+
+    .postal-modal.is-visible {
+      opacity: 1;
+    }
+
+    .postal-card {
+      width: min(100%, 320px);
+      background: #f2f2f7;
+      border-radius: 24px;
+      padding: 24px 20px 20px;
+      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.3);
+      text-align: left;
+      transform: scale(0.92);
+      transition: transform 220ms ease;
+    }
+
+    .postal-modal.is-visible .postal-card {
+      transform: scale(1);
+    }
+
+    .postal-icon {
+      width: 64px;
+      height: 64px;
+      border-radius: 18px;
+      background: linear-gradient(160deg, #ffd23f, #ffb703);
+      display: grid;
+      place-items: center;
+      margin-bottom: 16px;
+      font-size: 28px;
+    }
+
+    .postal-title {
+      margin: 0 0 8px;
+      font-family: "DM Sans", sans-serif;
+      font-weight: 700;
+      font-size: 19px;
+      line-height: 1.3;
+      color: #101828;
+    }
+
+    .postal-subtitle {
+      margin: 0 0 16px;
+      font-family: "Roboto", sans-serif;
+      font-size: 14px;
+      line-height: 1.4;
+      color: #6b7280;
+    }
+
+    .postal-input {
+      width: 100%;
+      box-sizing: border-box;
+      border: 2px solid #e4e4e9;
+      border-radius: 14px;
+      background: #ffffff;
+      font-family: "DM Sans", sans-serif;
+      font-weight: 600;
+      font-size: 20px;
+      letter-spacing: 0.02em;
+      color: #101828;
+      padding: 14px 16px;
+      margin-bottom: 16px;
+      outline: none;
+      transition: border-color 160ms ease;
+    }
+
+    .postal-input:focus {
+      border-color: #ffb703;
+    }
+
+    .postal-submit {
+      width: 100%;
+    }
   </style>
 </head>
 <body>
@@ -1157,6 +1248,23 @@
       </div>
     </div>
   </div>
+  <div class="postal-modal" id="postalModal">
+    <div class="postal-card">
+      <div class="postal-icon">📮</div>
+      <h2 class="postal-title">Podaj swój kod pocztowy</h2>
+      <p class="postal-subtitle">Dzięki temu pokażemy Ci gazetki i oferty sklepów w Twojej okolicy</p>
+      <input
+        class="postal-input"
+        id="postalInput"
+        type="text"
+        inputmode="numeric"
+        autocomplete="postal-code"
+        placeholder="00-000"
+        maxlength="6"
+      />
+      <button class="button-primary postal-submit" id="postalSubmit" type="button" disabled>Dalej</button>
+    </div>
+  </div>
   <script>
     const onboardingScreens = [
       {
@@ -1345,10 +1453,49 @@
       goToScreen(currentScreen + 1);
     });
 
+    const postalModal = document.getElementById("postalModal");
+    const postalInput = document.getElementById("postalInput");
+    const postalSubmit = document.getElementById("postalSubmit");
+
+    function openPostalModal() {
+      postalModal.classList.add("is-open");
+      postalInput.value = "";
+      postalSubmit.disabled = true;
+      postalInput.focus();
+      requestAnimationFrame(() => {
+        postalModal.classList.add("is-visible");
+      });
+    }
+
+    function closePostalModal() {
+      postalModal.classList.remove("is-visible");
+      postalInput.blur();
+      window.setTimeout(() => {
+        postalModal.classList.remove("is-open");
+      }, 220);
+    }
+
+    postalInput.addEventListener("input", () => {
+      let digits = postalInput.value.replace(/\D/g, "").slice(0, 5);
+      postalInput.value = digits.length > 2 ? `${digits.slice(0, 2)}-${digits.slice(2)}` : digits;
+      postalSubmit.disabled = digits.length !== 5;
+    });
+
+    postalSubmit.addEventListener("click", () => {
+      if (postalSubmit.disabled) return;
+      closePostalModal();
+      goToScreen(currentScreen + 1);
+    });
+
     permissionModal.addEventListener("click", (event) => {
       const choiceButton = event.target.closest("[data-permission-choice]");
       if (!choiceButton) return;
+      const choice = choiceButton.dataset.permissionChoice;
       closePermissionModal();
+      if (choice === "deny") {
+        openPostalModal();
+        return;
+      }
       goToScreen(currentScreen + 1);
     });
 
