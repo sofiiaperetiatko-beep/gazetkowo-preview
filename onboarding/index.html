@@ -239,6 +239,19 @@
 
     #speech2 {
       top: 53.5px;
+      opacity: 0;
+      animation: speech2-pop-in 240ms ease-out 950ms both;
+    }
+
+    @keyframes speech2-pop-in {
+      from {
+        opacity: 0;
+        transform: translateX(calc(-50% + 30px)) translateY(8px) scale(0.92);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(calc(-50% + 30px)) translateY(0) scale(1);
+      }
     }
 
     .coin {
