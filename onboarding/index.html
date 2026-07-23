@@ -144,22 +144,35 @@
     }
 
     .scatter-badge-1 {
-      top: 112px;
-      left: 6px;
+      top: 2px;
+      left: 50%;
       width: 78px;
+      z-index: 3;
+      animation-name: badge-pop-in-centered;
       animation-delay: 1050ms;
     }
 
+    @keyframes badge-pop-in-centered {
+      from {
+        opacity: 0;
+        transform: translateX(-50%) scale(0.2);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(-50%) scale(1);
+      }
+    }
+
     .scatter-badge-2 {
-      top: 32px;
-      left: 48px;
+      top: 256px;
+      right: 12px;
       width: 55px;
       animation-delay: 1160ms;
     }
 
     .scatter-badge-3 {
-      top: 232px;
-      right: 24px;
+      top: 136px;
+      left: 12px;
       width: 76px;
       animation-delay: 1270ms;
     }
@@ -197,22 +210,22 @@
     }
 
     .sale-badge-1 {
-      top: 340px;
-      left: 20px;
+      top: 382px;
+      right: 40px;
       width: 55px;
       animation-delay: 1700ms, 2100ms;
     }
 
     .sale-badge-2 {
-      top: 340px;
-      right: 20px;
+      top: 32px;
+      left: 8px;
       width: 55px;
       animation-delay: 1820ms, 2220ms;
     }
 
     .sale-badge-3 {
-      top: 150px;
-      right: 8px;
+      top: 345px;
+      left: 12px;
       width: 55px;
       animation-delay: 1940ms, 2340ms;
     }
