@@ -535,6 +535,155 @@
       color: var(--text-muted);
       margin-top: 10px;
     }
+
+    .permission-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 50;
+      background: rgba(60, 60, 67, 0.32);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      opacity: 0;
+      transition: opacity 220ms ease;
+    }
+
+    .permission-modal.is-open {
+      display: flex;
+    }
+
+    .permission-modal.is-visible {
+      opacity: 1;
+    }
+
+    .permission-card {
+      width: min(100%, 320px);
+      background: #f2f2f7;
+      border-radius: 24px;
+      padding: 24px 20px 20px;
+      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.3);
+      text-align: left;
+      transform: scale(0.92);
+      transition: transform 220ms ease;
+    }
+
+    .permission-modal.is-visible .permission-card {
+      transform: scale(1);
+    }
+
+    .permission-icon {
+      position: relative;
+      width: 64px;
+      height: 64px;
+      border-radius: 18px;
+      background: linear-gradient(160deg, #5aa9ff, #2f7de1);
+      display: grid;
+      place-items: center;
+      margin-bottom: 16px;
+    }
+
+    .permission-icon-badge {
+      position: absolute;
+      right: -8px;
+      bottom: -8px;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: #eaf2ff;
+      border: 3px solid #f2f2f7;
+      display: grid;
+      place-items: center;
+      font-size: 14px;
+    }
+
+    .permission-title {
+      margin: 0 0 8px;
+      font-family: "DM Sans", sans-serif;
+      font-weight: 700;
+      font-size: 19px;
+      line-height: 1.3;
+      color: #101828;
+    }
+
+    .permission-subtitle {
+      margin: 0 0 16px;
+      font-family: "Roboto", sans-serif;
+      font-size: 14px;
+      line-height: 1.4;
+      color: #6b7280;
+    }
+
+    .permission-map {
+      position: relative;
+      height: 170px;
+      border-radius: 14px;
+      overflow: hidden;
+      margin-bottom: 20px;
+      background-image: url(/img/onboarding/map.jpg);
+      background-size: cover;
+      background-position: center 40%;
+      mix-blend-mode: normal;
+      filter: saturate(0.7) brightness(1.05);
+    }
+
+    .permission-map-pill {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      background: rgba(255, 255, 255, 0.92);
+      border-radius: 999px;
+      padding: 5px 10px;
+      font-family: "Roboto", sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      color: #2f7de1;
+    }
+
+    .permission-map-dot {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: #2f7de1;
+      border: 3px solid #ffffff;
+      box-shadow: 0 0 0 8px rgba(47, 125, 225, 0.25);
+      transform: translate(-50%, -50%);
+    }
+
+    .permission-actions {
+      display: grid;
+      gap: 10px;
+    }
+
+    .permission-button {
+      width: 100%;
+      border: none;
+      border-radius: 14px;
+      background: #e4e4e9;
+      color: #0a84ff;
+      font-family: "DM Sans", sans-serif;
+      font-weight: 600;
+      font-size: 16px;
+      padding: 14px;
+      cursor: pointer;
+      touch-action: manipulation;
+    }
+
+    .permission-button:active {
+      background: #d7d7dc;
+    }
+
+    .permission-button[data-permission-choice="deny"] {
+      color: #101828;
+    }
   </style>
 </head>
 <body>
@@ -582,6 +731,27 @@
       </div>
     </section>
   </main>
+  <div class="permission-modal" id="permissionModal">
+    <div class="permission-card">
+      <div class="permission-icon">
+        <svg width="30" height="30" viewBox="0 0 24 24" fill="none">
+          <path d="M12 2 L20 20 L12 16 L4 20 Z" fill="#ffffff"/>
+        </svg>
+        <span class="permission-icon-badge">✋</span>
+      </div>
+      <h2 class="permission-title">Pozwalać aplikacji Gazetkowo na używanie Twojego położenia?</h2>
+      <p class="permission-subtitle">Twoja lokalizacja jest konieczna do wyświetlania gazetek z Twojej okolicy</p>
+      <div class="permission-map">
+        <div class="permission-map-pill">📍 Dokładne: wł.</div>
+        <div class="permission-map-dot"></div>
+      </div>
+      <div class="permission-actions">
+        <button class="permission-button" type="button" data-permission-choice="once">Pozwól raz</button>
+        <button class="permission-button" type="button" data-permission-choice="while-using">Pozwalaj, gdy używam aplikacji</button>
+        <button class="permission-button" type="button" data-permission-choice="deny">Nie pozwalaj</button>
+      </div>
+    </div>
+  </div>
   <script>
     const onboardingScreens = [
       {
@@ -758,7 +928,34 @@
       dots.forEach((dot, dotIndex) => dot.classList.toggle("active", dotIndex === currentScreen));
     }
 
+    const permissionModal = document.getElementById("permissionModal");
+
+    function openPermissionModal() {
+      permissionModal.classList.add("is-open");
+      requestAnimationFrame(() => {
+        permissionModal.classList.add("is-visible");
+      });
+    }
+
+    function closePermissionModal() {
+      permissionModal.classList.remove("is-visible");
+      window.setTimeout(() => {
+        permissionModal.classList.remove("is-open");
+      }, 220);
+    }
+
     nextButton.addEventListener("click", () => {
+      if (currentScreen === 1) {
+        openPermissionModal();
+        return;
+      }
+      goToScreen(currentScreen + 1);
+    });
+
+    permissionModal.addEventListener("click", (event) => {
+      const choiceButton = event.target.closest("[data-permission-choice]");
+      if (!choiceButton) return;
+      closePermissionModal();
       goToScreen(currentScreen + 1);
     });
 
