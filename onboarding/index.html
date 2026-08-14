@@ -71,120 +71,21 @@
       position: absolute;
       top: 106px;
       left: 50%;
-      width: 179px;
-      height: 240px;
+      width: 160px;
+      transform: translateX(-50%);
       z-index: 1;
-      transform-origin: bottom center;
-      transform: translateX(-50%) scale(0.15) translateY(30px);
-      opacity: 0;
-      transition: transform 480ms cubic-bezier(0.34, 1.56, 0.64, 1), opacity 320ms ease;
+      display: none;
       pointer-events: none;
     }
 
     .pin-marker.is-visible {
-      transform: translateX(-50%) scale(1) translateY(0);
-      opacity: 1;
-    }
-
-    .pin-wobble {
-      width: 100%;
-      height: 100%;
-      position: relative;
-      transform-origin: bottom center;
-      animation: pin-wobble 2.6s ease-in-out infinite;
-    }
-
-    @keyframes pin-wobble {
-      0%, 100% {
-        transform: rotate(-4deg);
-      }
-      50% {
-        transform: rotate(4deg);
-      }
-    }
-
-    .pin-shape {
-      width: 100%;
-      height: 100%;
       display: block;
     }
 
-    .pin-badge {
-      position: absolute;
-      top: 19px;
-      left: 50%;
-      width: 130px;
-      height: 130px;
-      transform: translateX(-50%);
-      opacity: 0;
-      transition: opacity 300ms ease 260ms;
-    }
-
-    .pin-marker.is-visible .pin-badge {
-      opacity: 1;
-    }
-
-    .scatter-badges {
-      display: none;
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-    }
-
-    .scatter-badges.is-visible {
+    .pin-fox-img {
+      width: 100%;
+      height: auto;
       display: block;
-    }
-
-    .scatter-badge {
-      position: absolute;
-      opacity: 0;
-      transform: scale(0.2);
-      animation: badge-pop-in 380ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
-    }
-
-    .scatter-badge-1 {
-      top: 0px;
-      left: 50%;
-      width: 50px;
-      z-index: 3;
-      animation-name: badge-pop-in-centered;
-      animation-delay: 1050ms;
-    }
-
-    @keyframes badge-pop-in-centered {
-      from {
-        opacity: 0;
-        transform: translateX(-50%) scale(0.24);
-      }
-      to {
-        opacity: 1;
-        transform: translateX(-50%) scale(1.2);
-      }
-    }
-
-    .scatter-badge-2 {
-      top: 256px;
-      right: 12px;
-      width: 55px;
-      animation-delay: 1160ms;
-    }
-
-    .scatter-badge-3 {
-      top: 150px;
-      left: 8px;
-      width: 72px;
-      animation-delay: 1270ms;
-    }
-
-    @keyframes badge-pop-in {
-      from {
-        opacity: 0;
-        transform: scale(0.2);
-      }
-      to {
-        opacity: 1;
-        transform: scale(1);
-      }
     }
 
     .hero-panel {
@@ -464,20 +365,6 @@
         opacity: 1;
         transform: translateX(0) rotate(-6deg) scale(1);
       }
-    }
-
-    .screen-backdrop {
-      position: absolute;
-      inset: 0;
-      z-index: 1;
-      background: rgba(16, 24, 40, 0.55);
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 220ms ease;
-    }
-
-    .screen-backdrop.is-visible {
-      opacity: 1;
     }
 
     .hero-footer {
@@ -1036,9 +923,7 @@
     .postal-keypad {
       width: 100%;
       margin-top: auto;
-      background: #ececef;
-      border-radius: 24px;
-      padding: 16px;
+      padding: 16px 0 0;
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 10px;
@@ -1103,15 +988,7 @@
     <section class="screen" id="screen">
       <div class="hero-panel">
         <div class="pin-marker" id="pinMarker">
-          <div class="pin-wobble">
-            <img class="pin-shape" src="/img/onboarding/map-pin.svg" alt="" />
-            <img class="pin-badge" src="/img/onboarding/pin-badge.svg" alt="" />
-          </div>
-        </div>
-        <div class="scatter-badges" id="scatterBadges">
-          <img class="scatter-badge scatter-badge-1" src="/img/onboarding/badge-lidl.png" alt="Lidl" />
-          <img class="scatter-badge scatter-badge-2" src="/img/onboarding/badge-aldi.png" alt="Aldi" />
-          <img class="scatter-badge scatter-badge-3" src="/img/onboarding/badge-dino.png" alt="Dino" />
+          <img class="pin-fox-img" src="/img/onboarding/lis-2@150x%201.png" alt="Lisek" />
         </div>
         <div class="hero-card" id="heroCard">
           <div class="speech">Hej tu Spryciak! Witaj w Gazetkowie</div>
@@ -1276,7 +1153,7 @@
         <svg class="shadow" id="shadowSvg" width="212" height="72" viewBox="0 0 212 72" fill="none" xmlns="http://www.w3.org/2000/svg">
           <ellipse cx="106" cy="36" rx="106" ry="36" fill="#D7E9FF"/>
         </svg>
-        <div class="speech is-hidden" id="speech2">Znajdę promocje blisko Ciebie</div>
+        <div class="speech is-hidden" id="speech2">Pokaże Ci gazetki z twojego regionu</div>
         <div class="retailer-grid" id="retailerGrid">
           <div class="retailer-search">
             <svg class="retailer-search-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -1291,7 +1168,6 @@
           <div class="retailer-subgrid" id="nearbyRetailers"></div>
         </div>
       </div>
-      <div class="screen-backdrop" id="screenBackdrop"></div>
       <div class="hero-footer">
         <h1 class="headline" id="headline">Gazetki, okazje i zniżki — wszystko w jednym miejscu.</h1>
         <p class="description" id="description">Natychmiast znajdź zniżki w sklepach w twojej okolicy. Nigdy nie przegapisz okazji.</p>
@@ -1499,10 +1375,8 @@
     const speech2 = document.getElementById("speech2");
     const mapBg = document.getElementById("mapBg");
     const pinMarker = document.getElementById("pinMarker");
-    const scatterBadges = document.getElementById("scatterBadges");
     const actionsRow = document.getElementById("actionsRow");
     const postalSheet = document.getElementById("postalSheet");
-    const screenBackdrop = document.getElementById("screenBackdrop");
     const postalBoxes = document.querySelectorAll("#postalBoxes .postal-box");
     const postalKeypad = document.getElementById("postalKeypad");
 
@@ -1531,13 +1405,11 @@
         heroCard.classList.toggle("is-hidden", currentScreen !== 0);
         mapBg.classList.toggle("is-visible", currentScreen === 1);
         pinMarker.classList.toggle("is-visible", currentScreen === 1);
-        scatterBadges.classList.toggle("is-visible", currentScreen === 1);
         shadowSvg.classList.toggle("is-small", currentScreen === 1);
         shadowSvg.classList.toggle("is-gone", currentScreen === 2);
         speech2.classList.toggle("is-hidden", currentScreen !== 1);
         skipButton.classList.toggle("is-hidden", currentScreen !== 1);
         postalSheet.classList.remove("is-visible");
-        screenBackdrop.classList.remove("is-visible");
         actionsRow.classList.remove("is-hidden");
         pagination.classList.remove("is-hidden");
         headlineEl.classList.remove("is-fading");
@@ -1589,9 +1461,7 @@
       renderPostalBoxes();
       actionsRow.classList.add("is-hidden");
       pagination.classList.add("is-hidden");
-      skipButton.classList.add("is-hidden");
       postalSheet.classList.add("is-visible");
-      screenBackdrop.classList.add("is-visible");
     }
 
     postalKeypad.addEventListener("click", (event) => {
