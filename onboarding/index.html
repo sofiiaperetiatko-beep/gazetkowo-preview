@@ -187,68 +187,6 @@
       }
     }
 
-    .sale-badges {
-      display: none;
-      position: absolute;
-      inset: 0;
-      z-index: 1;
-      pointer-events: none;
-    }
-
-    .sale-badges.is-visible {
-      display: block;
-    }
-
-    .sale-badge {
-      position: absolute;
-      opacity: 0;
-      transform: scale(0.2) rotate(-10deg);
-      animation:
-        sale-pop-in 400ms cubic-bezier(0.34, 1.56, 0.64, 1) both,
-        sale-pulse 2.2s ease-in-out infinite;
-    }
-
-    .sale-badge-1 {
-      top: 336px;
-      right: 40px;
-      width: 55px;
-      animation-delay: 1700ms, 2100ms;
-    }
-
-    .sale-badge-2 {
-      top: 32px;
-      left: 16px;
-      width: 40px;
-      animation-delay: 1820ms, 2220ms;
-    }
-
-    .sale-badge-3 {
-      top: 336px;
-      left: 12px;
-      width: 55px;
-      animation-delay: 1940ms, 2340ms;
-    }
-
-    @keyframes sale-pop-in {
-      from {
-        opacity: 0;
-        transform: scale(0.2) rotate(-10deg);
-      }
-      to {
-        opacity: 1;
-        transform: scale(1) rotate(0deg);
-      }
-    }
-
-    @keyframes sale-pulse {
-      0%, 100% {
-        transform: scale(1) rotate(0deg);
-      }
-      50% {
-        transform: scale(1.08) rotate(0deg);
-      }
-    }
-
     .hero-panel {
       position: absolute;
       inset: 0;
@@ -524,6 +462,20 @@
       }
     }
 
+    .screen-backdrop {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      background: rgba(16, 24, 40, 0.55);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 220ms ease;
+    }
+
+    .screen-backdrop.is-visible {
+      opacity: 1;
+    }
+
     .hero-footer {
       position: absolute;
       bottom: 0;
@@ -591,9 +543,8 @@
       left: 24px;
       right: 24px;
       z-index: 1;
-      grid-template-columns: repeat(3, 1fr);
-      grid-auto-rows: min-content;
-      gap: 10px;
+      flex-direction: column;
+      gap: 14px;
       overflow-y: auto;
       padding: 2px 2px 300px;
       opacity: 1;
@@ -602,7 +553,68 @@
     }
 
     .retailer-grid.is-visible {
+      display: flex;
+    }
+
+    .retailer-search {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0;
+      padding: 12px 16px;
+      border-radius: 999px;
+      background: #ffffff;
+      border: 1px solid var(--border);
+    }
+
+    .retailer-search-icon {
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
+      color: #98a2b3;
+    }
+
+    .retailer-search-input {
+      flex: 1;
+      min-width: 0;
+      border: none;
+      outline: none;
+      background: transparent;
+      font-family: "DM Sans", sans-serif;
+      font-weight: 600;
+      font-size: 0.95rem;
+      color: #101828;
+    }
+
+    .retailer-search-input::placeholder {
+      color: #98a2b3;
+      font-weight: 500;
+    }
+
+    .retailer-section-title {
+      margin: 0;
+      text-align: left;
+      font-family: "DM Sans", sans-serif;
+      font-weight: 400;
+      font-size: 12px;
+      letter-spacing: -0.01em;
+      color: var(--text);
+    }
+
+    .retailer-section-title.is-hidden {
+      display: none;
+    }
+
+    .retailer-subgrid {
       display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-auto-rows: min-content;
+      gap: 10px;
+      margin-top: -6px;
+    }
+
+    .retailer-subgrid.is-hidden {
+      display: none;
     }
 
     .retailer-item {
@@ -674,6 +686,10 @@
 
     .retailer-heart.is-active {
       color: #ef4444;
+    }
+
+    .retailer-item.is-hidden {
+      display: none;
     }
 
     .content {
@@ -1040,11 +1056,6 @@
           <img class="scatter-badge scatter-badge-2" src="/img/onboarding/badge-aldi.png" alt="Aldi" />
           <img class="scatter-badge scatter-badge-3" src="/img/onboarding/badge-dino.png" alt="Dino" />
         </div>
-        <div class="sale-badges" id="saleBadges">
-          <img class="sale-badge sale-badge-1" src="/img/onboarding/sale-1.svg" alt="" />
-          <img class="sale-badge sale-badge-2" src="/img/onboarding/sale-2.svg" alt="" />
-          <img class="sale-badge sale-badge-3" src="/img/onboarding/sale-3.svg" alt="" />
-        </div>
         <div class="hero-card" id="heroCard">
           <div class="speech">Hej tu Spryciak! Witaj w Gazetkowie</div>
           <div class="fox-wrapper">
@@ -1209,8 +1220,21 @@
           <ellipse cx="106" cy="36" rx="106" ry="36" fill="#D7E9FF"/>
         </svg>
         <div class="speech is-hidden" id="speech2">Znajdę promocje blisko Ciebie</div>
-        <div class="retailer-grid" id="retailerGrid"></div>
+        <div class="retailer-grid" id="retailerGrid">
+          <div class="retailer-search">
+            <svg class="retailer-search-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/>
+              <line x1="16.65" y1="16.65" x2="21" y2="21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+            <input class="retailer-search-input" id="retailerSearchInput" type="text" placeholder="Wyszukaj sklep" autocomplete="off" />
+          </div>
+          <h2 class="retailer-section-title" id="popularSectionTitle">Popularne sklepy</h2>
+          <div class="retailer-subgrid" id="popularRetailers"></div>
+          <h2 class="retailer-section-title" id="nearbySectionTitle">Sklepy blisko Ciebie</h2>
+          <div class="retailer-subgrid" id="nearbyRetailers"></div>
+        </div>
       </div>
+      <div class="screen-backdrop" id="screenBackdrop"></div>
       <div class="hero-footer">
         <h1 class="headline" id="headline">Gazetki, okazje i zniżki — wszystko w jednym miejscu.</h1>
         <p class="description" id="description">Natychmiast znajdź zniżki w sklepach w twojej okolicy. Nigdy nie przegapisz okazji.</p>
@@ -1328,10 +1352,20 @@
     };
 
     const retailerGrid = document.getElementById("retailerGrid");
+    const popularRetailers = document.getElementById("popularRetailers");
+    const nearbyRetailers = document.getElementById("nearbyRetailers");
+    const popularSectionTitle = document.getElementById("popularSectionTitle");
+    const nearbySectionTitle = document.getElementById("nearbySectionTitle");
+    const retailerSearchInput = document.getElementById("retailerSearchInput");
 
-    retailers.forEach((name, index) => {
+    const POPULAR_RETAILER_COUNT = 9;
+    const popularRetailerNames = retailers.slice(0, POPULAR_RETAILER_COUNT);
+    const nearbyRetailerNames = retailers.slice(POPULAR_RETAILER_COUNT);
+
+    function renderRetailerItem(name, index, container) {
       const item = document.createElement("div");
       item.className = "retailer-item";
+      item.dataset.name = name.toLowerCase();
       const logoFile = retailerLogoFiles[name];
       const logoImg = logoFile
         ? `<img
@@ -1352,8 +1386,11 @@
           ${logoImg}
         </div>
       `;
-      retailerGrid.appendChild(item);
-    });
+      container.appendChild(item);
+    }
+
+    popularRetailerNames.forEach((name, index) => renderRetailerItem(name, index, popularRetailers));
+    nearbyRetailerNames.forEach((name, index) => renderRetailerItem(name, POPULAR_RETAILER_COUNT + index, nearbyRetailers));
 
     let selectedRetailerCount = 0;
 
@@ -1365,6 +1402,29 @@
       heart.setAttribute("aria-pressed", String(isActive));
       selectedRetailerCount += isActive ? 1 : -1;
       updateNextButtonState();
+    });
+
+    retailerSearchInput.addEventListener("input", () => {
+      const query = retailerSearchInput.value.trim().toLowerCase();
+      let popularVisibleCount = 0;
+      let nearbyVisibleCount = 0;
+
+      popularRetailers.querySelectorAll(".retailer-item").forEach((item) => {
+        const isMatch = item.dataset.name.includes(query);
+        item.classList.toggle("is-hidden", !isMatch);
+        if (isMatch) popularVisibleCount += 1;
+      });
+
+      nearbyRetailers.querySelectorAll(".retailer-item").forEach((item) => {
+        const isMatch = item.dataset.name.includes(query);
+        item.classList.toggle("is-hidden", !isMatch);
+        if (isMatch) nearbyVisibleCount += 1;
+      });
+
+      popularSectionTitle.classList.toggle("is-hidden", popularVisibleCount === 0);
+      popularRetailers.classList.toggle("is-hidden", popularVisibleCount === 0);
+      nearbySectionTitle.classList.toggle("is-hidden", nearbyVisibleCount === 0);
+      nearbyRetailers.classList.toggle("is-hidden", nearbyVisibleCount === 0);
     });
 
     const pageEl = document.querySelector(".page");
@@ -1393,9 +1453,9 @@
     const mapBg = document.getElementById("mapBg");
     const pinMarker = document.getElementById("pinMarker");
     const scatterBadges = document.getElementById("scatterBadges");
-    const saleBadges = document.getElementById("saleBadges");
     const actionsRow = document.getElementById("actionsRow");
     const postalInline = document.getElementById("postalInline");
+    const screenBackdrop = document.getElementById("screenBackdrop");
     const postalBoxes = document.querySelectorAll("#postalBoxes .postal-box");
     const postalKeypad = document.getElementById("postalKeypad");
 
@@ -1425,12 +1485,12 @@
         mapBg.classList.toggle("is-visible", currentScreen === 1);
         pinMarker.classList.toggle("is-visible", currentScreen === 1);
         scatterBadges.classList.toggle("is-visible", currentScreen === 1);
-        saleBadges.classList.toggle("is-visible", currentScreen === 1);
         shadowSvg.classList.toggle("is-small", currentScreen === 1);
         shadowSvg.classList.toggle("is-gone", currentScreen === 2);
         speech2.classList.toggle("is-hidden", currentScreen !== 1);
         skipButton.classList.toggle("is-hidden", currentScreen === 2);
         postalInline.classList.remove("is-visible");
+        screenBackdrop.classList.remove("is-visible");
         actionsRow.classList.remove("is-hidden");
         pagination.classList.remove("is-hidden");
         headlineEl.classList.remove("is-fading");
@@ -1481,7 +1541,7 @@
       headlineEl.classList.add("is-fading");
       descriptionEl.classList.add("is-fading");
       window.setTimeout(() => {
-        headlineEl.textContent = "Sprawdzę dla Ciebie gazetki z Twojego rejonu.";
+        headlineEl.textContent = "Wprowadź kod pocztowy";
         descriptionEl.textContent = "Natychmiast znajdź zniżki w sklepach w twojej okolicy. Nigdy nie przegapisz okazji.";
         headlineEl.classList.remove("is-fading");
         descriptionEl.classList.remove("is-fading");
@@ -1489,6 +1549,7 @@
       actionsRow.classList.add("is-hidden");
       pagination.classList.add("is-hidden");
       postalInline.classList.add("is-visible");
+      screenBackdrop.classList.add("is-visible");
     }
 
     postalKeypad.addEventListener("click", (event) => {
