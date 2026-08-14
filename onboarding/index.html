@@ -382,14 +382,18 @@
       top: 24px;
       right: 20px;
       z-index: 20;
-      width: 36px;
       height: 36px;
+      padding: 0 16px;
       border: none;
-      border-radius: 13px;
+      border-radius: 999px;
       background: #ffffff;
       box-shadow: 0 10px 24px rgba(16, 24, 40, 0.14);
       display: grid;
       place-items: center;
+      font-family: "DM Sans", sans-serif;
+      font-weight: 400;
+      font-size: 14px;
+      color: #939aa0;
       cursor: pointer;
       touch-action: manipulation;
       opacity: 1;
@@ -949,15 +953,48 @@
       display: none;
     }
 
-    .postal-inline {
-      display: none;
+    .postal-sheet {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 3;
+      height: 62%;
+      display: flex;
       flex-direction: column;
+      align-items: center;
       gap: 14px;
-      margin-top: -4px;
+      text-align: center;
+      background: #ffffff;
+      border-top-left-radius: 32px;
+      border-top-right-radius: 32px;
+      box-shadow: 0 -10px 40px rgba(16, 24, 40, 0.08);
+      padding: 36px 20px 20px;
+      transform: translateY(100%);
+      transition: transform 320ms cubic-bezier(0.32, 0.72, 0, 1);
     }
 
-    .postal-inline.is-visible {
-      display: flex;
+    .postal-sheet.is-visible {
+      transform: translateY(0);
+    }
+
+    .postal-sheet-title {
+      margin: 0;
+      font-family: "DM Sans", sans-serif;
+      font-weight: 700;
+      font-size: 18px;
+      line-height: 1.3;
+      color: var(--text);
+    }
+
+    .postal-sheet-description {
+      margin: 0;
+      max-width: 280px;
+      font-family: "Roboto", sans-serif;
+      font-size: 0.96rem;
+      line-height: 1.6;
+      font-weight: 500;
+      color: var(--text-muted);
     }
 
     .postal-boxes {
@@ -1035,11 +1072,7 @@
 </head>
 <body>
   <div class="map-bg" id="mapBg"></div>
-  <button class="skip-button" id="skipButton" type="button" aria-label="Pomiń">
-    <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
-      <path d="M4.5 4.5l11 11M15.5 4.5l-11 11" stroke="#20232C" stroke-width="2.2" stroke-linecap="round"/>
-    </svg>
-  </button>
+  <button class="skip-button is-hidden" id="skipButton" type="button" aria-label="Pomiń">Pomiń</button>
   <main class="page">
     <section class="screen" id="screen">
       <div class="hero-panel">
@@ -1244,25 +1277,27 @@
           <button class="dot" type="button" data-screen="1" aria-label="Krok 2"></button>
           <button class="dot" type="button" data-screen="2" aria-label="Krok 3"></button>
         </div>
-        <div class="postal-inline" id="postalInline">
-          <div class="postal-boxes" id="postalBoxes">
-            <span class="postal-box" data-placeholder="0"></span>
-            <span class="postal-box" data-placeholder="0"></span>
-            <span class="postal-dash">—</span>
-            <span class="postal-box" data-placeholder="0"></span>
-            <span class="postal-box" data-placeholder="0"></span>
-            <span class="postal-box" data-placeholder="0"></span>
-            <input
-              class="postal-native-input"
-              id="postalNativeInput"
-              type="tel"
-              inputmode="numeric"
-              pattern="[0-9]*"
-              maxlength="5"
-              autocomplete="postal-code"
-              aria-label="Kod pocztowy"
-            />
-          </div>
+      </div>
+      <div class="postal-sheet" id="postalSheet">
+        <h1 class="postal-sheet-title">Wprowadź kod pocztowy</h1>
+        <p class="postal-sheet-description">Natychmiast znajdź zniżki w sklepach w twojej okolicy. Nigdy nie przegapisz okazji.</p>
+        <div class="postal-boxes" id="postalBoxes">
+          <span class="postal-box" data-placeholder="0"></span>
+          <span class="postal-box" data-placeholder="0"></span>
+          <span class="postal-dash">—</span>
+          <span class="postal-box" data-placeholder="0"></span>
+          <span class="postal-box" data-placeholder="0"></span>
+          <span class="postal-box" data-placeholder="0"></span>
+          <input
+            class="postal-native-input"
+            id="postalNativeInput"
+            type="tel"
+            inputmode="numeric"
+            pattern="[0-9]*"
+            maxlength="5"
+            autocomplete="postal-code"
+            aria-label="Kod pocztowy"
+          />
         </div>
       </div>
     </section>
@@ -1436,7 +1471,7 @@
     const pinMarker = document.getElementById("pinMarker");
     const scatterBadges = document.getElementById("scatterBadges");
     const actionsRow = document.getElementById("actionsRow");
-    const postalInline = document.getElementById("postalInline");
+    const postalSheet = document.getElementById("postalSheet");
     const screenBackdrop = document.getElementById("screenBackdrop");
     const postalBoxes = document.querySelectorAll("#postalBoxes .postal-box");
     const postalNativeInput = document.getElementById("postalNativeInput");
@@ -1470,8 +1505,8 @@
         shadowSvg.classList.toggle("is-small", currentScreen === 1);
         shadowSvg.classList.toggle("is-gone", currentScreen === 2);
         speech2.classList.toggle("is-hidden", currentScreen !== 1);
-        skipButton.classList.toggle("is-hidden", currentScreen === 2);
-        postalInline.classList.remove("is-visible");
+        skipButton.classList.toggle("is-hidden", currentScreen !== 1);
+        postalSheet.classList.remove("is-visible");
         screenBackdrop.classList.remove("is-visible");
         actionsRow.classList.remove("is-hidden");
         pagination.classList.remove("is-hidden");
@@ -1523,17 +1558,10 @@
       postalDigits = "";
       postalNativeInput.value = "";
       renderPostalBoxes();
-      headlineEl.classList.add("is-fading");
-      descriptionEl.classList.add("is-fading");
-      window.setTimeout(() => {
-        headlineEl.textContent = "Wprowadź kod pocztowy";
-        descriptionEl.textContent = "Natychmiast znajdź zniżki w sklepach w twojej okolicy. Nigdy nie przegapisz okazji.";
-        headlineEl.classList.remove("is-fading");
-        descriptionEl.classList.remove("is-fading");
-      }, 200);
       actionsRow.classList.add("is-hidden");
       pagination.classList.add("is-hidden");
-      postalInline.classList.add("is-visible");
+      skipButton.classList.add("is-hidden");
+      postalSheet.classList.add("is-visible");
       screenBackdrop.classList.add("is-visible");
       postalNativeInput.focus();
     }
