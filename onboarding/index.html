@@ -998,48 +998,15 @@
     }
 
     .postal-boxes {
-      position: relative;
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 10px;
     }
 
-    .postal-native-input {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      border: none;
-      outline: none;
-      box-shadow: none;
-      background: transparent;
-      color: transparent;
-      -webkit-text-fill-color: transparent;
-      -webkit-tap-highlight-color: transparent;
-      -webkit-appearance: none;
-      appearance: none;
-      font-size: 16px;
-      caret-color: transparent;
-      cursor: pointer;
-    }
-
-    .postal-native-input:focus {
-      outline: none;
-      box-shadow: none;
-    }
-
-    .postal-native-input:-webkit-autofill,
-    .postal-native-input:-webkit-autofill:hover,
-    .postal-native-input:-webkit-autofill:focus {
-      -webkit-text-fill-color: transparent;
-      -webkit-box-shadow: 0 0 0 1000px transparent inset;
-      transition: background-color 5000s ease-in-out 0s;
-    }
-
     .postal-box {
-      width: 40px;
-      height: 48px;
+      width: 32px;
+      height: 38px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -1047,13 +1014,11 @@
       font-weight: 700;
       font-size: 22px;
       color: #101828;
-      background: #f2f2f7;
-      border-radius: 14px;
-      border: 2px solid transparent;
+      border-bottom: 2px solid var(--border, #d0d5dd);
     }
 
     .postal-box.is-active {
-      border-color: #ffb703;
+      border-bottom-color: #ffb703;
     }
 
     .postal-box.is-placeholder {
@@ -1066,6 +1031,67 @@
       font-weight: 700;
       font-size: 22px;
       color: #98a2b3;
+    }
+
+    .postal-keypad {
+      width: 100%;
+      margin-top: auto;
+      background: #ececef;
+      border-radius: 24px;
+      padding: 16px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    .postal-key {
+      border: none;
+      border-radius: 16px;
+      background: #ffffff;
+      box-shadow: 0 1px 2px rgba(16, 24, 40, 0.1);
+      color: #101828;
+      font-family: "DM Sans", sans-serif;
+      font-weight: 700;
+      font-size: 22px;
+      padding: 13px 0 9px;
+      cursor: pointer;
+      touch-action: manipulation;
+      line-height: 1.1;
+    }
+
+    .postal-key:active {
+      background: #e9e9ec;
+    }
+
+    .postal-key-sub {
+      display: block;
+      font-family: "Roboto", sans-serif;
+      font-weight: 500;
+      font-size: 9px;
+      letter-spacing: 0.08em;
+      color: #98a2b3;
+      margin-top: 2px;
+    }
+
+    .postal-key-zero {
+      border-radius: 999px;
+    }
+
+    .postal-key-empty {
+      background: transparent;
+      box-shadow: none;
+      pointer-events: none;
+    }
+
+    .postal-key-back {
+      background: transparent;
+      box-shadow: none;
+      color: #20232c;
+      font-size: 19px;
+    }
+
+    .postal-key-back:active {
+      background: transparent;
     }
 
   </style>
@@ -1288,16 +1314,20 @@
           <span class="postal-box" data-placeholder="0"></span>
           <span class="postal-box" data-placeholder="0"></span>
           <span class="postal-box" data-placeholder="0"></span>
-          <input
-            class="postal-native-input"
-            id="postalNativeInput"
-            type="tel"
-            inputmode="numeric"
-            pattern="[0-9]*"
-            maxlength="5"
-            autocomplete="postal-code"
-            aria-label="Kod pocztowy"
-          />
+        </div>
+        <div class="postal-keypad" id="postalKeypad">
+          <button type="button" class="postal-key" data-key="1">1</button>
+          <button type="button" class="postal-key" data-key="2">2<span class="postal-key-sub">ABC</span></button>
+          <button type="button" class="postal-key" data-key="3">3<span class="postal-key-sub">DEF</span></button>
+          <button type="button" class="postal-key" data-key="4">4<span class="postal-key-sub">GHI</span></button>
+          <button type="button" class="postal-key" data-key="5">5<span class="postal-key-sub">JKL</span></button>
+          <button type="button" class="postal-key" data-key="6">6<span class="postal-key-sub">MNO</span></button>
+          <button type="button" class="postal-key" data-key="7">7<span class="postal-key-sub">PQRS</span></button>
+          <button type="button" class="postal-key" data-key="8">8<span class="postal-key-sub">TUV</span></button>
+          <button type="button" class="postal-key" data-key="9">9<span class="postal-key-sub">WXYZ</span></button>
+          <span class="postal-key postal-key-empty"></span>
+          <button type="button" class="postal-key postal-key-zero" data-key="0">0</button>
+          <button type="button" class="postal-key postal-key-back" data-key="back" aria-label="Usuń cyfrę">⌫</button>
         </div>
       </div>
     </section>
@@ -1474,7 +1504,7 @@
     const postalSheet = document.getElementById("postalSheet");
     const screenBackdrop = document.getElementById("screenBackdrop");
     const postalBoxes = document.querySelectorAll("#postalBoxes .postal-box");
-    const postalNativeInput = document.getElementById("postalNativeInput");
+    const postalKeypad = document.getElementById("postalKeypad");
 
     function updateNextButtonState() {
       const needsRetailer = currentScreen === 2 && selectedRetailerCount === 0;
@@ -1556,22 +1586,24 @@
 
     function enterPostalMode() {
       postalDigits = "";
-      postalNativeInput.value = "";
       renderPostalBoxes();
       actionsRow.classList.add("is-hidden");
       pagination.classList.add("is-hidden");
       skipButton.classList.add("is-hidden");
       postalSheet.classList.add("is-visible");
       screenBackdrop.classList.add("is-visible");
-      postalNativeInput.focus();
     }
 
-    postalNativeInput.addEventListener("input", () => {
-      postalDigits = postalNativeInput.value.replace(/\D/g, "").slice(0, 5);
-      postalNativeInput.value = postalDigits;
+    postalKeypad.addEventListener("click", (event) => {
+      const key = event.target.closest(".postal-key[data-key]")?.dataset.key;
+      if (!key) return;
+      if (key === "back") {
+        postalDigits = postalDigits.slice(0, -1);
+      } else if (postalDigits.length < 5) {
+        postalDigits += key;
+      }
       renderPostalBoxes();
       if (postalDigits.length === 5) {
-        postalNativeInput.blur();
         window.setTimeout(() => {
           goToScreen(currentScreen + 1);
         }, 350);
