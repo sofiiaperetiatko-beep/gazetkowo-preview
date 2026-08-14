@@ -974,12 +974,30 @@
       width: 100%;
       height: 100%;
       border: none;
+      outline: none;
+      box-shadow: none;
       background: transparent;
       color: transparent;
       -webkit-text-fill-color: transparent;
+      -webkit-tap-highlight-color: transparent;
+      -webkit-appearance: none;
+      appearance: none;
       font-size: 16px;
       caret-color: transparent;
       cursor: pointer;
+    }
+
+    .postal-native-input:focus {
+      outline: none;
+      box-shadow: none;
+    }
+
+    .postal-native-input:-webkit-autofill,
+    .postal-native-input:-webkit-autofill:hover,
+    .postal-native-input:-webkit-autofill:focus {
+      -webkit-text-fill-color: transparent;
+      -webkit-box-shadow: 0 0 0 1000px transparent inset;
+      transition: background-color 5000s ease-in-out 0s;
     }
 
     .postal-box {
@@ -999,6 +1017,11 @@
 
     .postal-box.is-active {
       border-color: #ffb703;
+    }
+
+    .postal-box.is-placeholder {
+      color: #c9ccd0;
+      font-weight: 600;
     }
 
     .postal-dash {
@@ -1223,12 +1246,12 @@
         </div>
         <div class="postal-inline" id="postalInline">
           <div class="postal-boxes" id="postalBoxes">
-            <span class="postal-box"></span>
-            <span class="postal-box"></span>
+            <span class="postal-box" data-placeholder="0"></span>
+            <span class="postal-box" data-placeholder="0"></span>
             <span class="postal-dash">—</span>
-            <span class="postal-box"></span>
-            <span class="postal-box"></span>
-            <span class="postal-box"></span>
+            <span class="postal-box" data-placeholder="0"></span>
+            <span class="postal-box" data-placeholder="0"></span>
+            <span class="postal-box" data-placeholder="0"></span>
             <input
               class="postal-native-input"
               id="postalNativeInput"
@@ -1489,7 +1512,9 @@
 
     function renderPostalBoxes() {
       postalBoxes.forEach((box, index) => {
-        box.textContent = postalDigits[index] || "";
+        const digit = postalDigits[index];
+        box.textContent = digit || box.dataset.placeholder;
+        box.classList.toggle("is-placeholder", !digit);
         box.classList.toggle("is-active", index === postalDigits.length && postalDigits.length < 5);
       });
     }
