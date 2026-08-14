@@ -30,22 +30,22 @@
       color: var(--text);
       display: flex;
       justify-content: center;
-      align-items: flex-start;
       height: 100vh;
       height: 100dvh;
-      padding: 16px 0 0;
+      padding: 0;
     }
 
     .page {
-      width: 420px;
+      width: 100%;
+      max-width: 420px;
+      height: 100%;
       flex-shrink: 0;
       overflow: hidden;
-      transform-origin: center bottom;
     }
 
     .screen {
       position: relative;
-      height: 692px;
+      height: 100%;
       overflow: hidden;
     }
 
@@ -1427,18 +1427,6 @@
       nearbyRetailers.classList.toggle("is-hidden", nearbyVisibleCount === 0);
     });
 
-    const pageEl = document.querySelector(".page");
-
-    function fitPageToViewport() {
-      pageEl.style.transform = "scale(1)";
-      const rect = pageEl.getBoundingClientRect();
-      const scale = window.innerWidth / rect.width;
-      pageEl.style.transform = `scale(${scale})`;
-    }
-
-    fitPageToViewport();
-    window.addEventListener("resize", fitPageToViewport);
-    window.addEventListener("orientationchange", fitPageToViewport);
 
     let currentScreen = 0;
     const headlineEl = document.getElementById("headline");
