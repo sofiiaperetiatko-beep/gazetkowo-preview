@@ -538,7 +538,7 @@
     .retailer-grid {
       display: none;
       position: absolute;
-      top: 16px;
+      top: 24px;
       bottom: 0;
       left: 24px;
       right: 24px;
@@ -672,7 +672,6 @@
       box-shadow: none;
       display: grid;
       place-items: center;
-      color: #c7cbd6;
       cursor: pointer;
       padding: 0;
       touch-action: manipulation;
@@ -684,8 +683,9 @@
       display: block;
     }
 
-    .retailer-heart.is-active {
-      color: #ef4444;
+    .retailer-heart.is-active svg path {
+      fill: #ef4444;
+      stroke: #ef4444;
     }
 
     .retailer-item.is-hidden {
@@ -1379,7 +1379,7 @@
         : "";
       item.innerHTML = `
         <button class="retailer-heart" type="button" aria-label="Obserwuj ${name}" aria-pressed="false">
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-7.5-4.6-10.2-9.3C0.1 8.7 1.4 5 5 4.1c2.1-0.5 4.1 0.4 5.3 2.1a1 1 0 0 0 1.6 0c1.2-1.7 3.2-2.6 5.3-2.1 3.6 0.9 4.9 4.6 3.2 7.6C19.5 16.4 12 21 12 21z"/></svg>
+          <svg viewBox="0 0 24 24" fill="none"><path d="M12 21s-7.5-4.6-10.2-9.3C0.1 8.7 1.4 5 5 4.1c2.1-0.5 4.1 0.4 5.3 2.1a1 1 0 0 0 1.6 0c1.2-1.7 3.2-2.6 5.3-2.1 3.6 0.9 4.9 4.6 3.2 7.6C19.5 16.4 12 21 12 21z" fill="#ffffff" stroke="#C9CCD0" stroke-width="1.5" stroke-linejoin="round"/></svg>
         </button>
         <div class="retailer-logo" style="color:${retailerColors[index % retailerColors.length]}">
           <span class="retailer-logo-fallback">${initials(name)}</span>
