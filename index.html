@@ -1374,17 +1374,9 @@
 
     .price-hint-icon {
       flex: 0 0 auto;
+      display: block;
       width: 14px;
       height: 14px;
-      display: grid;
-      place-items: center;
-      border-radius: 50%;
-      background: var(--mock-muted);
-      color: #ffffff;
-      font-size: 9px;
-      font-weight: 700;
-      font-style: normal;
-      line-height: 1;
     }
 
     .edit-field.has-error label {
@@ -2028,7 +2020,7 @@
               </div>
             </div>
           </div>
-          <span class="price-hint" id="editPriceHint"><span class="price-hint-icon" aria-hidden="true">i</span>Cena z oferty dołączona do produktu</span>
+          <span class="price-hint" id="editPriceHint"><svg class="price-hint-icon" aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="11" stroke="#C9CCD0" stroke-width="2"/><circle cx="12" cy="7" r="1" fill="#C9CCD0"/><rect x="11" y="10" width="2" height="8" fill="#C9CCD0"/></svg>Cena z oferty dołączona do produktu</span>
           <div class="edit-field">
             <label id="categoryFieldLabel">Kategoria</label>
             <input type="hidden" id="editCategory" value="Nabiał">
