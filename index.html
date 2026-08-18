@@ -1780,17 +1780,22 @@
     .hint {
       position: relative;
       display: flex;
-      align-items: flex-start;
+      align-items: center;
       gap: 10px;
       margin: 12px 0;
       padding: 12px 12px 12px 14px;
+      border: 1px solid #E9EBEC;
       border-radius: 6px;
-      background: #E8F1FC;
+      background: #F5F5F5;
       color: var(--mock-ink);
     }
 
     .hint.is-hidden {
       display: none;
+    }
+
+    .hint-icon {
+      flex: 0 0 auto;
     }
 
     .hint-text {
@@ -1908,6 +1913,7 @@
       </section>
 
       <div class="hint" id="longTapHint">
+        <svg class="hint-icon" aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="11" stroke="#C9CCD0" stroke-width="2"/><circle cx="12" cy="7" r="1" fill="#C9CCD0"/><rect x="11" y="10" width="2" height="8" fill="#C9CCD0"/></svg>
         <span class="hint-text">Przytrzymaj produkt na stronie gazetki (long tap), a sam trafi na Twoją listę.</span>
         <button class="hint-close" id="longTapHintClose" type="button" aria-label="Zamknij podpowiedź">
           <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>
