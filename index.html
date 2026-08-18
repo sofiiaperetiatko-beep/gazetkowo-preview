@@ -1742,6 +1742,56 @@
         transform: translateY(0) scale(1);
       }
     }
+
+    .hint {
+      position: relative;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin: 12px 0;
+      padding: 12px 12px 12px 14px;
+      border-radius: 6px;
+      background: #E8F1FC;
+      color: var(--mock-ink);
+    }
+
+    .hint.is-hidden {
+      display: none;
+    }
+
+    .hint-text {
+      flex: 1;
+      min-width: 0;
+      font-size: 10px;
+      line-height: 1.35;
+      font-weight: 400;
+    }
+
+    .hint-close {
+      position: absolute;
+      top: -6px;
+      right: -6px;
+      flex: 0 0 auto;
+      width: 16px;
+      height: 16px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: #273542;
+      color: #ffffff;
+      cursor: pointer;
+      pointer-events: auto;
+    }
+
+    .hint-close svg {
+      display: block;
+      width: 14px;
+      height: 14px;
+    }
+
+    .hint-close:active {
+      opacity: 0.85;
+    }
   </style>
 </head>
 <body>
@@ -1818,6 +1868,13 @@
           <div class="price">6<sup>49</sup></div>
         </article>
       </section>
+
+      <div class="hint" id="longTapHint">
+        <span class="hint-text">Przytrzymaj produkt na stronie gazetki (long tap), a sam trafi na Twoją listę.</span>
+        <button class="hint-close" id="longTapHintClose" type="button" aria-label="Zamknij podpowiedź">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>
+        </button>
+      </div>
 
       <section class="card retailer" data-od-id="biedronka-offers" aria-label="Oferty Biedronka">
         <div class="store-head">
@@ -3120,6 +3177,16 @@
       if (inlineAdd.contains(event.target)) return;
       closeInlineAdd();
     }, true);
+
+    const longTapHint = document.querySelector("#longTapHint");
+    const longTapHintClose = document.querySelector("#longTapHintClose");
+    if (localStorage.getItem("longTapHintDismissed") === "true") {
+      longTapHint.classList.add("is-hidden");
+    }
+    longTapHintClose.addEventListener("click", () => {
+      longTapHint.classList.add("is-hidden");
+      localStorage.setItem("longTapHintDismissed", "true");
+    });
 
     updateBoughtCount();
   </script>

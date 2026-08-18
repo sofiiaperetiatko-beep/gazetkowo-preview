@@ -1773,7 +1773,7 @@
       display: flex;
       align-items: flex-start;
       gap: 10px;
-      margin: 12px 16px;
+      margin: 12px 0;
       padding: 12px 12px 12px 14px;
       border-radius: 6px;
       background: #E8F1FC;
@@ -1809,6 +1809,7 @@
     }
 
     .hint-close svg {
+      display: block;
       width: 14px;
       height: 14px;
     }
@@ -1897,7 +1898,7 @@
       <div class="hint" id="longTapHint">
         <span class="hint-text">Przytrzymaj produkt na stronie gazetki (long tap), a sam trafi na Twoją listę.</span>
         <button class="hint-close" id="longTapHintClose" type="button" aria-label="Zamknij podpowiedź">
-          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M6 6l12 12M18 6 6 18"/></svg>
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>
         </button>
       </div>
 
