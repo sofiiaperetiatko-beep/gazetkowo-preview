@@ -1205,10 +1205,6 @@
       overflow: hidden;
     }
 
-    .product-sheet.is-expanded {
-      height: 75vh;
-    }
-
     .sheet-body {
       flex: 1;
       min-height: 0;
@@ -2423,13 +2419,13 @@
       updateCategoryOptionHighlight();
       categoryPicker.classList.add("is-open");
       categoryTrigger.setAttribute("aria-expanded", "true");
-      productSheet.classList.add("is-expanded");
+      productSheet.style.height = `${Math.round(window.innerHeight * 0.75)}px`;
     }
 
     function closeCategoryPicker() {
       categoryPicker.classList.remove("is-open");
       categoryTrigger.setAttribute("aria-expanded", "false");
-      productSheet.classList.remove("is-expanded");
+      productSheet.style.height = "";
     }
 
     function toggleCategoryPicker() {
