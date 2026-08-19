@@ -1178,8 +1178,7 @@
 
     .product-sheet {
       width: 100%;
-      height: auto;
-      max-height: 75vh;
+      height: 75vh;
       margin: 0 auto;
       padding: 10px 16px calc(18px + env(safe-area-inset-bottom));
       border-radius: 24px 24px 0 0;
@@ -2406,13 +2405,11 @@
       updateCategoryOptionHighlight();
       categoryPicker.classList.add("is-open");
       categoryTrigger.setAttribute("aria-expanded", "true");
-      productSheet.style.height = `${Math.round(window.innerHeight * 0.75)}px`;
     }
 
     function closeCategoryPicker() {
       categoryPicker.classList.remove("is-open");
       categoryTrigger.setAttribute("aria-expanded", "false");
-      productSheet.style.height = "";
     }
 
     function toggleCategoryPicker() {
