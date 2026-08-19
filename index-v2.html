@@ -1191,17 +1191,22 @@
 
     .product-sheet {
       width: 100%;
-      height: 75vh;
+      height: auto;
+      max-height: 75vh;
       margin: 0 auto;
       padding: 10px 16px calc(18px + env(safe-area-inset-bottom));
       border-radius: 24px 24px 0 0;
       background: var(--surface);
       box-shadow: rgba(0, 0, 0, 0.16) 0 -12px 34px;
       transform: translateY(105%);
-      transition: transform 260ms var(--ease-standard);
+      transition: transform 260ms var(--ease-standard), height 220ms var(--ease-standard);
       display: flex;
       flex-direction: column;
       overflow: hidden;
+    }
+
+    .product-sheet.is-expanded {
+      height: 75vh;
     }
 
     .sheet-body {
@@ -1740,6 +1745,7 @@
 
     .sheet-action.delete-product {
       border: 1px solid #E9EBEC;
+      border-radius: 999px;
       background: var(--surface);
       color: var(--mock-red);
     }
@@ -2063,7 +2069,7 @@
 
       <div class="sheet-actions">
         <button class="sheet-action delete-product" id="deleteProduct" type="button">Usuń produkt</button>
-        <button class="sheet-action save-product" id="saveProduct" type="button">Zapisz zmiany</button>
+        <button class="sheet-action save-product" id="saveProduct" type="button">Zapisz</button>
       </div>
     </section>
   </div>
@@ -2417,11 +2423,13 @@
       updateCategoryOptionHighlight();
       categoryPicker.classList.add("is-open");
       categoryTrigger.setAttribute("aria-expanded", "true");
+      productSheet.classList.add("is-expanded");
     }
 
     function closeCategoryPicker() {
       categoryPicker.classList.remove("is-open");
       categoryTrigger.setAttribute("aria-expanded", "false");
+      productSheet.classList.remove("is-expanded");
     }
 
     function toggleCategoryPicker() {
@@ -2694,7 +2702,7 @@
       const category = row.dataset.category || (name === "chipsy" ? "Przekąski" : "Nabiał");
 
       sheetTitle.textContent = "Edycja produktu";
-      saveProduct.textContent = "Zapisz zmiany";
+      saveProduct.textContent = "Zapisz";
       productSheet.classList.remove("is-add-mode");
       editName.value = name;
       editPrice.value = price;
