@@ -1073,6 +1073,48 @@
       text-align: center;
     }
 
+    .list-empty-state {
+      display: none;
+      min-height: 40vh;
+      padding: 40px 24px 0;
+      text-align: center;
+    }
+
+    .card.manual.is-empty {
+      margin-bottom: 24px;
+    }
+
+    .card.manual.no-divider {
+      border-bottom: 0;
+    }
+
+    .list-empty-state.is-visible {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .list-empty-icon {
+      margin: 0 0 12px;
+    }
+
+    .list-empty-title {
+      margin: 0 0 6px;
+      color: var(--mock-ink);
+      font-size: 15px;
+      line-height: 1.35;
+      font-weight: 700;
+    }
+
+    .list-empty-text {
+      margin: 0;
+      color: var(--mock-muted);
+      font-size: 13px;
+      line-height: 1.4;
+      font-weight: 400;
+    }
+
     .empty.is-visible { display: block; }
 
     .bottom-nav {
@@ -1905,6 +1947,45 @@
             </div>
           </form>
         </div>
+        <div class="list-empty-state" id="listEmptyState">
+          <svg class="list-empty-icon" aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" fill="none">
+<path d="M32 64C49.6731 64 64 49.6731 64 32C64 14.3269 49.6731 0 32 0C14.3269 0 0 14.3269 0 32C0 49.6731 14.3269 64 32 64Z" fill="#F6CD47"/>
+<path d="M24.7181 9L24.3396 13.258L21.217 42.4965L41.3717 45.5244L44.9674 50.1609C45.472 50.3502 46.7841 50.3502 47.9953 48.8362C49.2065 47.3222 49.9508 41.0771 50.1716 38.1438L52.8211 11.6494L51.7802 10.7032L24.7181 9Z" fill="#F6F7F7" stroke="#273542" stroke-width="0.378491" stroke-linecap="round"/>
+<path d="M46.3866 49.9717C47.4545 47.3824 51.035 22.5132 51.6855 10.7979L52.6642 11.7808L51.7157 24.2364L49.6038 43.3481L48.1845 48.7416L46.3866 49.9717Z" fill="#C9CCD0"/>
+<path d="M24.7181 9L24.3396 13.258L21.217 42.4965L41.3717 45.5244L44.9674 50.1609C45.472 50.3502 46.7841 50.3502 47.9953 48.8362C49.2065 47.3222 49.9508 41.0771 50.1716 38.1438L52.8211 11.6494L51.7802 10.7032L24.7181 9Z" stroke="#273542" stroke-width="0.378491" stroke-linecap="round"/>
+<path d="M11.7548 52.148C10.3355 51.801 7.38327 50.123 6.92908 46.1867H16.2967C16.7698 44.4835 17.6972 37.7274 17.6215 24.3289V14.9612V13.5419L45.4406 12.6902L46.576 13.4472L46.1975 42.1179C46.1345 45.7711 45.3081 53.0618 42.5072 52.9996C40.9933 52.9996 21.3748 52.4318 11.7548 52.148Z" fill="white"/>
+<path d="M42.5072 52.9996C39.555 52.4697 39.5739 48.2369 39.9524 46.1867H16.2967M42.5072 52.9996C40.9933 52.9996 21.3748 52.4318 11.7548 52.148C10.3355 51.801 7.38327 50.123 6.92908 46.1867H16.2967M42.5072 52.9996C45.3081 53.0618 46.1345 45.7711 46.1975 42.1179L46.576 13.4472L45.4406 12.6902L17.6215 13.5419V14.9612V24.3289C17.6972 37.7274 16.7698 44.4835 16.2967 46.1867" stroke="#273542" stroke-width="0.378491" stroke-linecap="round"/>
+<rect x="23.1837" y="18.0203" width="14.3827" height="2.46019" rx="1.2301" transform="rotate(-1 23.1837 18.0203)" fill="#E9EBEC"/>
+<rect x="21.1223" y="23.1934" width="18.1676" height="1.32472" rx="0.66236" fill="#E9EBEC"/>
+<rect x="21.1223" y="26.7891" width="18.1676" height="1.32472" rx="0.66236" fill="#E9EBEC"/>
+<rect x="21.1223" y="30.3848" width="18.1676" height="1.32472" rx="0.66236" fill="#E9EBEC"/>
+<rect x="21.1223" y="33.4127" width="18.1676" height="1.32472" rx="0.66236" fill="#E9EBEC"/>
+<rect x="21.1223" y="36.4406" width="18.1676" height="1.32472" rx="0.66236" fill="#E9EBEC"/>
+<rect x="21.1223" y="40.0363" width="18.1676" height="1.32472" rx="0.66236" fill="#E9EBEC"/>
+<path d="M6.92908 46.0921H39.5739L40.1417 51.1071L41.7503 52.9996L11.3763 52.148L9.48389 51.0125L7.87531 49.2147L6.92908 46.0921Z" fill="#F6F7F7"/>
+<path d="M9.01062 50.4447L40.3308 51.3909L41.7501 52.9995L11.3762 52.1479L9.01062 50.4447Z" fill="#C9CCD0"/>
+<path d="M44.3995 51.2963C45.3079 48.6469 45.4088 24.5181 45.3458 12.7849L46.5759 13.3526L46.3866 25.8428L46.1027 45.0512L45.2511 49.4039L44.3995 51.2963Z" fill="#C9CCD0"/>
+<path d="M42.5072 52.9996C39.555 52.4697 39.5739 48.2369 39.9524 46.1867H16.2967M42.5072 52.9996C40.9933 52.9996 21.3748 52.4318 11.7548 52.148C10.3355 51.801 7.38327 50.123 6.92908 46.1867H16.2967M42.5072 52.9996C45.3081 53.0618 46.1345 45.7711 46.1975 42.1179L46.576 13.4472L45.4406 12.6902L17.6215 13.5419V14.9612V24.3289C17.6972 37.7274 16.7698 44.4835 16.2967 46.1867" stroke="#273542" stroke-width="0.378491" stroke-linecap="round"/>
+<g filter="url(#listEmptyIconInnerShadow)">
+<rect x="40.804" y="28.1138" width="13.2472" height="13.2472" rx="2.0817" fill="#F8D975"/>
+</g>
+<rect x="40.9932" y="28.303" width="12.8687" height="12.8687" rx="1.89246" stroke="#273542" stroke-width="0.378491"/>
+<path d="M46.3866 35.9675L44.2103 33.8858L43.6426 34.9266L46.6705 37.9545L50.8339 31.0471L49.7931 30.6686L46.3866 35.9675Z" fill="white" stroke="#273542" stroke-width="0.378491"/>
+<defs>
+<filter id="listEmptyIconInnerShadow" x="40.804" y="28.1138" width="13.2472" height="13.2472" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+<feOffset dx="-1.32472" dy="-1.51396"/>
+<feComposite in2="hardAlpha" operator="arithmetic" k2="-1" k3="1"/>
+<feColorMatrix type="matrix" values="0 0 0 0 0.964706 0 0 0 0 0.803922 0 0 0 0 0.278431 0 0 0 1 0"/>
+<feBlend mode="normal" in2="shape" result="effect1_innerShadow_2045_14222"/>
+</filter>
+</defs>
+</svg>
+          <p class="list-empty-title">Dodaj produkty do swojej listy zakupów</p>
+          <p class="list-empty-text">Naciśnij + lub przytrzymaj produkt z gazetki promocyjnej</p>
+        </div>
         <article class="row" data-name="ser żółty" data-price="8,99" data-qty="1" data-category="Nabiał" data-has-promos="true" data-promo-key="cheese">
           <button class="check" aria-label="Oznacz ser żółty jako kupione"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke-width="3"><path d="m5 12 4 4 10-10"/></svg></button>
           <div class="category-icon"><span class="cheese-icon"></span></div>
@@ -1970,23 +2051,25 @@
         </article>
       </section>
 
-      <div class="section-head">
-        <button class="section-toggle" id="toggleBought" type="button" aria-expanded="true" aria-controls="boughtList">
-          <h2 id="boughtTitle">Kupione (1)</h2>
-          <svg class="section-toggle-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.7"><path d="m6 9 6 6 6-6"/></svg>
-        </button>
-        <button class="delete" id="deleteBought" type="button">Usuń kupione</button>
-      </div>
+      <div id="boughtSection">
+        <div class="section-head">
+          <button class="section-toggle" id="toggleBought" type="button" aria-expanded="true" aria-controls="boughtList">
+            <h2 id="boughtTitle">Kupione (1)</h2>
+            <svg class="section-toggle-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.7"><path d="m6 9 6 6 6-6"/></svg>
+          </button>
+          <button class="delete" id="deleteBought" type="button">Usuń kupione</button>
+        </div>
 
-      <section class="card bought" id="boughtList" data-od-id="bought-products" aria-labelledby="boughtTitle">
-        <article class="row" data-name="mleko" data-price="5,00" data-qty="2" data-category="Nabiał">
-          <button class="check" aria-label="Produkt kupiony"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke-width="3"><path d="m5 12 4 4 10-10"/></svg></button>
-          <div class="category-icon"><span class="milk-icon"></span></div>
-          <div class="item-main"><div class="name"><strong>mleko</strong></div></div>
-          <div class="price">5<sup>00</sup></div>
-        </article>
-        <div class="empty" id="emptyBought">Brak kupionych produktów.</div>
-      </section>
+        <section class="card bought" id="boughtList" data-od-id="bought-products" aria-labelledby="boughtTitle">
+          <article class="row" data-name="mleko" data-price="5,00" data-qty="2" data-category="Nabiał">
+            <button class="check" aria-label="Produkt kupiony"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke-width="3"><path d="m5 12 4 4 10-10"/></svg></button>
+            <div class="category-icon"><span class="milk-icon"></span></div>
+            <div class="item-main"><div class="name"><strong>mleko</strong></div></div>
+            <div class="price">5<sup>00</sup></div>
+          </article>
+          <div class="empty" id="emptyBought">Brak kupionych produktów.</div>
+        </section>
+      </div>
     </main>
   </div>
 
@@ -2073,6 +2156,8 @@
     const boughtList = document.querySelector("#boughtList");
     const boughtTitle = document.querySelector("#boughtTitle");
     const emptyBought = document.querySelector("#emptyBought");
+    const listEmptyState = document.querySelector("#listEmptyState");
+    const boughtSection = document.querySelector("#boughtSection");
     const toggleBought = document.querySelector("#toggleBought");
     const deleteBought = document.querySelector("#deleteBought");
     const undoToast = document.querySelector("#undoToast");
@@ -2178,6 +2263,18 @@
       const count = getBoughtRows().length;
       boughtTitle.textContent = `Kupione (${count})`;
       emptyBought.classList.toggle("is-visible", count === 0);
+    }
+
+    function updateListEmptyState() {
+      const manualCard = document.querySelector('[data-od-id="manual-products"]');
+      const manualCount = manualCard.querySelectorAll(".row").length;
+      const retailerCount = document.querySelectorAll('.card.retailer .row').length;
+      const isListEmpty = manualCount === 0 && retailerCount === 0;
+      const hideBoughtSection = isListEmpty && getBoughtRows().length === 0;
+      listEmptyState.classList.toggle("is-visible", isListEmpty);
+      manualCard.classList.toggle("is-empty", isListEmpty);
+      manualCard.classList.toggle("no-divider", hideBoughtSection);
+      boughtSection.style.display = hideBoughtSection ? "none" : "";
     }
 
     function collapseRow(row, onDone) {
@@ -2463,8 +2560,7 @@
         </div>
       `;
 
-      const boughtHead = document.querySelector(".section-head");
-      boughtHead.parentNode.insertBefore(section, boughtHead);
+      boughtSection.parentNode.insertBefore(section, boughtSection);
       return section;
     }
 
@@ -2637,6 +2733,7 @@
         boughtRow.classList.remove("is-adding");
         sourceRow.remove();
         updateBoughtCount();
+        updateListEmptyState();
 
         if (parent.classList.contains("retailer") && !parent.querySelector(".row")) {
           parent.style.display = "none";
@@ -2655,6 +2752,7 @@
       bindActiveRow(row);
       window.setTimeout(() => row.classList.remove("is-adding"), 280);
       updateRetailerSectionVisibility(storeSection);
+      updateListEmptyState();
       return row;
     }
 
@@ -2665,6 +2763,7 @@
       collapseRow(row, () => {
         row.remove();
         updateRetailerSectionVisibility(storeSection);
+        updateListEmptyState();
       });
     }
 
@@ -2912,6 +3011,7 @@
       manualCard.insertBefore(row, firstProduct || null);
       bindActiveRow(row);
       window.setTimeout(() => row.classList.remove("is-adding"), 280);
+      updateListEmptyState();
       return true;
     }
 
@@ -2960,6 +3060,7 @@
         bindActiveRow(row);
         closeProductSheet();
         window.setTimeout(() => row.classList.remove("is-adding"), 280);
+        updateListEmptyState();
         return;
       }
 
@@ -2992,7 +3093,10 @@
       const rowToDelete = activeRow;
       rowToDelete.classList.add("is-removing");
       closeProductSheet();
-      collapseRow(rowToDelete, () => rowToDelete.remove());
+      collapseRow(rowToDelete, () => {
+        rowToDelete.remove();
+        updateListEmptyState();
+      });
     }
 
     function restoreSourceRow(boughtRow) {
@@ -3019,6 +3123,7 @@
 
         boughtRow.remove();
         updateBoughtCount();
+        updateListEmptyState();
       });
     }
 
@@ -3082,7 +3187,10 @@
         collapseRow(row, () => {
           row.remove();
           remaining -= 1;
-          if (remaining === 0) updateBoughtCount();
+          if (remaining === 0) {
+            updateBoughtCount();
+            updateListEmptyState();
+          }
         });
       });
     });
@@ -3255,6 +3363,7 @@
     });
 
     updateBoughtCount();
+    updateListEmptyState();
   </script>
 </body>
 </html>
